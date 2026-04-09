@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "Settle",
+    "slug": "settle",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "settle",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#111110"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.settle.app"
+    },
+    "android": {
+      "package": "com.settle.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#0a1628"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
