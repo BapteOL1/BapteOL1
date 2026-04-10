@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "scheme": "settle",
     "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
     "splash": {
       "resizeMode": "contain",
       "backgroundColor": "#111110"
