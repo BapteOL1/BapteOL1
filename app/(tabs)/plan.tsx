@@ -19,11 +19,11 @@ import { serviceCategories, ServiceCategory, ServiceProvider } from '../../data/
 
 function StatusBadge({ status, label }: { status: ServiceCategory['status']; label: string }) {
   const map = {
-    booked: { bg: 'rgba(96,48,255,0.18)', color: '#746fff' },
-    active: { bg: 'rgba(137,209,133,0.15)', color: '#89d185' },
+    booked: { bg: 'rgba(200,169,122,0.18)', color: '#c8a97a' },
+    active: { bg: 'rgba(74,170,118,0.15)', color: '#4aaa76' },
     alert: { bg: colors.redDim, color: colors.red },
-    pending: { bg: 'rgba(255,141,20,0.15)', color: colors.orange },
-    included: { bg: 'rgba(55,148,255,0.15)', color: colors.blue },
+    pending: { bg: 'rgba(91,158,245,0.15)', color: colors.blue },
+    included: { bg: 'rgba(91,158,245,0.12)', color: colors.blue },
   };
   const s = map[status];
   return (
