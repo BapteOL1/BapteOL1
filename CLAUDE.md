@@ -24,4 +24,5 @@ Always apply this design system when generating any code for Settle:
 - Accent button: background #c8a97a, color black
 
 ## Reference files
+Always read CLAUDE.md and `01-Brand/settle-brand-tokens.js` before writing any code.
 Always read settle-brand-kit.html for component patterns before generating UI code.
