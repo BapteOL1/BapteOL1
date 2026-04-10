@@ -21,8 +21,8 @@ export default function TabLayout() {
           paddingBottom: 18,
           paddingTop: 10,
         },
-        tabBarActiveTintColor: colors.accent,
-        tabBarInactiveTintColor: '#4e4c49',
+        tabBarActiveTintColor: colors.accentBright,
+        tabBarInactiveTintColor: 'rgba(255,255,255,0.25)',
         tabBarLabelStyle: {
           fontSize: 10,
           fontWeight: '600',
@@ -41,21 +41,21 @@ export default function TabLayout() {
       <Tabs.Screen
         name="search"
         options={{
-          title: 'Search',
+          title: 'Recherche',
           tabBarIcon: ({ color }) => <SearchIcon color={color} size={22} />,
         }}
       />
       <Tabs.Screen
         name="plan"
         options={{
-          title: 'Plan',
+          title: 'Services',
           tabBarIcon: ({ color }) => <PlanIcon color={color} size={22} />,
         }}
       />
       <Tabs.Screen
         name="ai"
         options={{
-          title: 'AI',
+          title: 'IA',
           tabBarIcon: ({ color }) => <AIIcon color={color} size={22} />,
         }}
       />

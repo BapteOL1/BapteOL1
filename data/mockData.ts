@@ -1,3 +1,5 @@
+// ─── Neighborhoods ──────────────────────────────────────────────────────────
+
 export const neighborhoodData = [
   {
     id: '1',
@@ -6,7 +8,7 @@ export const neighborhoodData = [
     avgRent: '$2,800/mo',
     commute: '12 min',
     score: 8.7,
-    scoreColor: '#4caf8a',
+    scoreColor: '#89d185',
     tags: ['Safe', 'Good transit', 'Young professionals'],
   },
   {
@@ -16,7 +18,7 @@ export const neighborhoodData = [
     avgRent: '$2,200/mo',
     commute: '28 min',
     score: 8.2,
-    scoreColor: '#c8a97a',
+    scoreColor: '#746fff',
     tags: ['Diverse', 'Affordable', 'Food scene'],
   },
   {
@@ -26,7 +28,7 @@ export const neighborhoodData = [
     avgRent: '$2,400/mo',
     commute: '22 min',
     score: 7.9,
-    scoreColor: '#c8a97a',
+    scoreColor: '#746fff',
     tags: ['Waterfront', 'Growing', 'PATH access'],
   },
   {
@@ -36,7 +38,7 @@ export const neighborhoodData = [
     avgRent: '$2,600/mo',
     commute: '18 min',
     score: 8.1,
-    scoreColor: '#c8a97a',
+    scoreColor: '#746fff',
     tags: ['Modern buildings', 'Art scene', 'Waterfront'],
   },
   {
@@ -46,10 +48,285 @@ export const neighborhoodData = [
     avgRent: '$2,100/mo',
     commute: '35 min',
     score: 7.5,
-    scoreColor: '#e8954a',
+    scoreColor: '#ff8d14',
     tags: ['Creative', 'Nightlife', 'Artists'],
   },
 ];
+
+// ─── Service Providers ───────────────────────────────────────────────────────
+
+export interface ServiceProvider {
+  id: string;
+  name: string;
+  initials: string;
+  color: string;
+  price: string;
+  priceNote: string;
+  rating: number;
+  reviews: string;
+  features: string[];
+  recommended?: boolean;
+  selected?: boolean;
+}
+
+export interface ServiceCategory {
+  id: string;
+  icon: string;
+  iconColor: string;
+  title: string;
+  currentProvider: string;
+  status: 'booked' | 'active' | 'alert' | 'pending' | 'included';
+  statusLabel: string;
+  monthlyCost?: string;
+  providers: ServiceProvider[];
+}
+
+export const serviceCategories: ServiceCategory[] = [
+  {
+    id: 'moving',
+    icon: 'cube-outline',
+    iconColor: '#6030ff',
+    title: 'Déménagement',
+    currentProvider: 'FlatRate Moving',
+    status: 'booked',
+    statusLabel: 'Réservé',
+    monthlyCost: '$1,200',
+    providers: [
+      {
+        id: 'flatrate',
+        name: 'FlatRate Moving',
+        initials: 'FR',
+        color: '#6030ff',
+        price: '$1,200',
+        priceNote: 'Devis confirmé · Confirmation #FR-29841',
+        rating: 4.8,
+        reviews: '2.1k',
+        features: [
+          'April 1, 9:00 AM — confirmé',
+          'Assurance incluse jusqu\'à $50k',
+          'Emballage professionnel disponible',
+          'Camion dédié (pas de partage)',
+        ],
+        selected: true,
+        recommended: true,
+      },
+      {
+        id: 'twoMen',
+        name: 'Two Men and a Truck',
+        initials: 'TM',
+        color: '#3794ff',
+        price: '$1,400',
+        priceNote: 'Estimation · À confirmer',
+        rating: 4.5,
+        reviews: '890',
+        features: [
+          'Disponible April 1',
+          'Assurance incluse jusqu\'à $30k',
+          'Emballage en option (+$200)',
+          'Équipe de 2 déménageurs',
+        ],
+      },
+      {
+        id: 'uhaul',
+        name: 'U-Haul (location)',
+        initials: 'UH',
+        color: '#ff8d14',
+        price: '$350',
+        priceNote: '+ carburant estimé $60',
+        rating: 3.9,
+        reviews: '5.2k',
+        features: [
+          'Camion 20 pieds disponible',
+          'Kilométrage illimité',
+          'Équipement de déménagement inclus',
+          'Option économique — vous conduisez',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'electricity',
+    icon: 'flash-outline',
+    iconColor: '#ff8d14',
+    title: 'Électricité',
+    currentProvider: 'Con Edison',
+    status: 'alert',
+    statusLabel: 'Non activé — urgent',
+    providers: [
+      {
+        id: 'coned',
+        name: 'Con Edison',
+        initials: 'CE',
+        color: '#ff8d14',
+        price: '~$150–400/mo',
+        priceNote: 'Selon consommation · Activation 3–5 jours ouvrés',
+        rating: 4.2,
+        reviews: '2.4k',
+        features: [
+          'Seul fournisseur disponible dans votre zone',
+          'Délai d\'activation : 3–5 jours ouvrés',
+          'App mobile + paiement automatique',
+          'Compte en ligne en 10 min',
+        ],
+        recommended: true,
+      },
+    ],
+  },
+  {
+    id: 'internet',
+    icon: 'wifi-outline',
+    iconColor: '#3794ff',
+    title: 'Internet',
+    currentProvider: 'Verizon Fios',
+    status: 'pending',
+    statusLabel: 'Installation à planifier',
+    monthlyCost: '$80/mo',
+    providers: [
+      {
+        id: 'fios',
+        name: 'Verizon Fios',
+        initials: 'VZ',
+        color: '#d14249',
+        price: '$80/mo',
+        priceNote: '300 Mbps · sans engagement · box TV incluse',
+        rating: 4.6,
+        reviews: '3.1k',
+        features: [
+          'Fibre optique 100% dédiée',
+          'Technicien requis — planifier rapidement',
+          'Débits symétriques upload/download',
+          'Sans coupure garantie 99.9%',
+        ],
+        recommended: true,
+        selected: true,
+      },
+      {
+        id: 'spectrum',
+        name: 'Spectrum',
+        initials: 'SP',
+        color: '#6030ff',
+        price: '$70/mo',
+        priceNote: '200 Mbps · engagement 12 mois',
+        rating: 3.8,
+        reviews: '1.8k',
+        features: [
+          'Câble coaxial (pas fibre)',
+          'Self-install kit disponible',
+          'Prix promotionnel 12 mois puis $90/mo',
+          'Couverture large Manhattan',
+        ],
+      },
+      {
+        id: 'optimum',
+        name: 'Optimum',
+        initials: 'OP',
+        color: '#89d185',
+        price: '$65/mo',
+        priceNote: '200 Mbps · engagement 12 mois',
+        rating: 3.5,
+        reviews: '940',
+        features: [
+          'Câble coaxial',
+          'Couverture à vérifier pour votre adresse',
+          'Technicien ou self-install',
+          'Option la moins chère',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'insurance',
+    icon: 'shield-checkmark-outline',
+    iconColor: '#89d185',
+    title: 'Assurance locataire',
+    currentProvider: 'Lemonade',
+    status: 'active',
+    statusLabel: 'Actif',
+    monthlyCost: '$15/mo',
+    providers: [
+      {
+        id: 'lemonade',
+        name: 'Lemonade',
+        initials: 'LM',
+        color: '#ff3860',
+        price: '$15/mo',
+        priceNote: 'Couverture $25,000 · Responsabilité $100k',
+        rating: 4.7,
+        reviews: '12k',
+        features: [
+          'Couverture immédiate après souscription',
+          'Remboursement en 3 minutes via app',
+          'Requis et validé par votre bail',
+          '100% digital — zéro paperasse',
+        ],
+        selected: true,
+        recommended: true,
+      },
+      {
+        id: 'stateFarm',
+        name: 'State Farm',
+        initials: 'SF',
+        color: '#d14249',
+        price: '$22/mo',
+        priceNote: 'Couverture $50,000 · Responsabilité $300k',
+        rating: 4.4,
+        reviews: '8.5k',
+        features: [
+          'Couverture plus étendue',
+          'Agent local disponible',
+          'Objets de valeur couverts séparément',
+          'Déductible configurable',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'water',
+    icon: 'water-outline',
+    iconColor: '#3794ff',
+    title: 'Eau & Gaz',
+    currentProvider: 'NYC DEP / National Grid',
+    status: 'included',
+    statusLabel: 'Inclus dans le loyer',
+    providers: [
+      {
+        id: 'nycdep',
+        name: 'NYC DEP (eau)',
+        initials: 'NY',
+        color: '#3794ff',
+        price: 'Inclus',
+        priceNote: 'Géré par le propriétaire · Aucune action requise',
+        rating: 4.0,
+        reviews: '—',
+        features: [
+          'Inclus dans votre loyer mensuel',
+          'Facturé directement au propriétaire',
+          'Aucune démarche de votre côté',
+          'Eau chaude et froide couverte',
+        ],
+        selected: true,
+      },
+      {
+        id: 'nationalGrid',
+        name: 'National Grid (gaz)',
+        initials: 'NG',
+        color: '#6030ff',
+        price: '~$50–150/mo',
+        priceNote: 'Si applicable selon votre appartement',
+        rating: 4.1,
+        reviews: '1.2k',
+        features: [
+          'Vérifier si votre apt utilise le gaz',
+          'Activation : 3–5 jours ouvrés',
+          'Pour cuisinière ou chauffage au gaz',
+          'Compte en ligne disponible',
+        ],
+      },
+    ],
+  },
+];
+
+// ─── Budget ──────────────────────────────────────────────────────────────────
 
 export interface Expense {
   id: string;
@@ -61,20 +338,22 @@ export interface Expense {
 }
 
 export const monthlyExpenses: Expense[] = [
-  { id: 'm1', label: 'Rent', amount: 3380, color: '#c8a97a', barWidth: 1.0 },
-  { id: 'm2', label: 'Internet', amount: 80, color: '#6a8ac8', barWidth: 0.024 },
-  { id: 'm3', label: 'MTA Pass', amount: 134, color: '#9a7ac8', barWidth: 0.04 },
-  { id: 'm4', label: 'Electricity', amount: 0, color: '#e85454', barWidth: 0, warning: true },
-  { id: 'm5', label: 'Renters Insurance', amount: 15, color: '#4caf8a', barWidth: 0.004 },
+  { id: 'm1', label: 'Rent', amount: 3380, color: '#6030ff', barWidth: 1.0 },
+  { id: 'm2', label: 'Internet', amount: 80, color: '#3794ff', barWidth: 0.024 },
+  { id: 'm3', label: 'MTA Pass', amount: 134, color: '#746fff', barWidth: 0.04 },
+  { id: 'm4', label: 'Electricity', amount: 0, color: '#ff8d14', barWidth: 0, warning: true },
+  { id: 'm5', label: 'Renters Insurance', amount: 15, color: '#89d185', barWidth: 0.004 },
 ];
 
 export const upfrontExpenses: Expense[] = [
-  { id: 'u1', label: 'First month rent', amount: 3380, color: '#c8a97a', barWidth: 0.4 },
-  { id: 'u2', label: 'Security deposit', amount: 3380, color: '#9a7ac8', barWidth: 0.4 },
-  { id: 'u3', label: 'Moving company', amount: 1200, color: '#6a8ac8', barWidth: 0.142 },
-  { id: 'u4', label: 'Building fee', amount: 350, color: '#e8954a', barWidth: 0.041 },
-  { id: 'u5', label: 'Utility deposit', amount: 150, color: '#4caf8a', barWidth: 0.018 },
+  { id: 'u1', label: 'First month rent', amount: 3380, color: '#6030ff', barWidth: 0.4 },
+  { id: 'u2', label: 'Security deposit', amount: 3380, color: '#746fff', barWidth: 0.4 },
+  { id: 'u3', label: 'Moving company', amount: 1200, color: '#3794ff', barWidth: 0.142 },
+  { id: 'u4', label: 'Building fee', amount: 350, color: '#ff8d14', barWidth: 0.041 },
+  { id: 'u5', label: 'Utility deposit', amount: 150, color: '#89d185', barWidth: 0.018 },
 ];
+
+// ─── Timeline ────────────────────────────────────────────────────────────────
 
 export interface Task {
   id: string;
@@ -86,6 +365,7 @@ export interface Task {
   description: string;
   whyItMatters: string;
   actionLabel: string;
+  category: string;
 }
 
 export interface TaskGroup {
@@ -97,121 +377,130 @@ export interface TaskGroup {
 export const initialTimelineGroups: TaskGroup[] = [
   {
     id: 'this-week',
-    title: 'This week',
+    title: 'Cette semaine',
     tasks: [
       {
         id: 't1',
-        title: 'Activate Con Edison',
-        dueLabel: 'DUE TODAY',
-        dueColor: '#e85454',
-        dueBg: '#2e1414',
+        title: 'Activer Con Edison',
+        dueLabel: 'AUJOURD\'HUI',
+        dueColor: '#d14249',
+        dueBg: '#2a1520',
         completed: false,
-        description: 'Activate your Con Edison electricity account for 350 W 42nd St, Apt 12B.',
+        description: 'Activer votre compte Con Edison pour le 350 W 42nd St, Apt 12B.',
         whyItMatters:
-          'Without activation, you will have no electricity on move-in day (April 1). Con Edison requires 3–5 business days to process new accounts.',
-        actionLabel: 'Activate Now',
+          'Sans activation, vous n\'aurez pas d\'électricité le jour du déménagement (1er avril). Con Edison nécessite 3 à 5 jours ouvrés pour traiter les nouveaux comptes.',
+        actionLabel: 'Activer maintenant',
+        category: 'electricity',
       },
       {
         id: 't2',
-        title: 'Reserve building elevator',
-        dueLabel: 'Due Apr 28',
-        dueColor: '#e4e2dc',
+        title: 'Réserver l\'ascenseur de service',
+        dueLabel: '28 avr.',
+        dueColor: 'rgba(255,255,255,0.9)',
         completed: false,
-        description: 'Contact building management to reserve the freight elevator for move day.',
+        description: 'Contacter la gestion de l\'immeuble pour réserver l\'ascenseur de fret le jour du déménagement.',
         whyItMatters:
-          'Most Manhattan buildings require advance elevator booking. Moving without a reservation can cause delays and extra fees.',
-        actionLabel: 'Contact Building',
+          'La plupart des immeubles de Manhattan exigent une réservation d\'ascenseur à l\'avance. Déménager sans réservation peut entraîner des retards et des frais supplémentaires.',
+        actionLabel: 'Contacter l\'immeuble',
+        category: 'moving',
       },
       {
         id: 't3',
-        title: 'Sign lease',
-        dueLabel: 'Completed',
-        dueColor: '#4caf8a',
-        dueBg: '#122a1e',
+        title: 'Signer le bail',
+        dueLabel: 'Complété',
+        dueColor: '#89d185',
+        dueBg: '#1a2a1a',
         completed: true,
-        description: 'Sign your lease agreement for 350 W 42nd St.',
-        whyItMatters: 'Your lease is signed and your tenancy is legally established.',
-        actionLabel: 'View Lease',
+        description: 'Signer le contrat de bail pour le 350 W 42nd St.',
+        whyItMatters: 'Votre bail est signé et votre location est légalement établie.',
+        actionLabel: 'Voir le bail',
+        category: 'lease',
       },
     ],
   },
   {
     id: 'next-week',
-    title: 'Next week',
+    title: 'Semaine prochaine',
     tasks: [
       {
         id: 't4',
-        title: 'Set up internet (Verizon Fios)',
-        dueLabel: 'Due Apr 30',
-        dueColor: '#e4e2dc',
+        title: 'Planifier installation Verizon Fios',
+        dueLabel: '30 avr.',
+        dueColor: 'rgba(255,255,255,0.9)',
         completed: false,
-        description: 'Schedule Verizon Fios installation for your new apartment.',
+        description: 'Planifier l\'installation de Verizon Fios pour votre nouvel appartement.',
         whyItMatters:
-          'Fios installation requires an in-person technician visit. Book early to get your preferred time slot — slots fill up fast in Hell\'s Kitchen.',
-        actionLabel: 'Schedule Installation',
+          'L\'installation Fios nécessite une visite d\'un technicien. Réservez tôt pour obtenir votre créneau préféré — les créneaux se remplissent vite à Hell\'s Kitchen.',
+        actionLabel: 'Planifier l\'installation',
+        category: 'internet',
       },
       {
         id: 't5',
-        title: 'Get renters insurance',
-        dueLabel: 'Due May 1',
-        dueColor: '#e4e2dc',
+        title: 'Souscrire assurance locataire',
+        dueLabel: '1 mai',
+        dueColor: 'rgba(255,255,255,0.9)',
         completed: false,
-        description: 'Purchase renters insurance before your move-in date.',
+        description: 'Souscrire une assurance locataire avant votre date d\'emménagement.',
         whyItMatters:
-          'Your lease requires proof of renters insurance. Lemonade offers plans from $5/mo with same-day coverage.',
-        actionLabel: 'Get Quote',
+          'Votre bail exige une preuve d\'assurance locataire. Lemonade propose des plans à partir de $15/mois avec couverture le jour même.',
+        actionLabel: 'Obtenir un devis',
+        category: 'insurance',
       },
       {
         id: 't6',
-        title: 'Book movers (FlatRate)',
-        dueLabel: 'Completed',
-        dueColor: '#4caf8a',
-        dueBg: '#122a1e',
+        title: 'Déménageurs FlatRate confirmés',
+        dueLabel: 'Complété',
+        dueColor: '#89d185',
+        dueBg: '#1a2a1a',
         completed: true,
-        description: 'FlatRate Moving booked for April 1, 9:00 AM.',
-        whyItMatters: 'Your movers are confirmed. Confirmation #FR-29841.',
-        actionLabel: 'View Confirmation',
+        description: 'FlatRate Moving réservé pour le 1er avril à 9h00.',
+        whyItMatters: 'Vos déménageurs sont confirmés. Confirmation #FR-29841.',
+        actionLabel: 'Voir la confirmation',
+        category: 'moving',
       },
     ],
   },
   {
     id: 'after-move',
-    title: 'After move-in',
+    title: 'Après l\'emménagement',
     tasks: [
       {
         id: 't7',
-        title: 'Lease renewal window opens',
-        dueLabel: 'Oct 1',
-        dueColor: '#e4e2dc',
+        title: 'Ouverture fenêtre de renouvellement',
+        dueLabel: '1 oct.',
+        dueColor: 'rgba(255,255,255,0.9)',
         completed: false,
         description:
-          'Your landlord must provide renewal terms 90–150 days before lease end.',
+          'Votre propriétaire doit fournir les conditions de renouvellement 90 à 150 jours avant la fin du bail.',
         whyItMatters:
-          'NYC law requires landlords to offer renewals with advance notice. Use this window to negotiate rent before agreeing.',
-        actionLabel: 'Set Reminder',
+          'La loi de NYC oblige les propriétaires à proposer les renouvellements avec un préavis. Utilisez cette fenêtre pour négocier le loyer avant d\'accepter.',
+        actionLabel: 'Définir un rappel',
+        category: 'lease',
       },
       {
         id: 't8',
-        title: 'ETF window closes',
-        dueLabel: 'Oct 1',
-        dueColor: '#e4e2dc',
+        title: 'Fermeture fenêtre de résiliation',
+        dueLabel: '1 oct.',
+        dueColor: 'rgba(255,255,255,0.9)',
         completed: false,
-        description: 'Your early termination fee clause requires 60 days written notice.',
+        description: 'La clause de résiliation anticipée exige un préavis écrit de 60 jours.',
         whyItMatters:
-          'If you plan to break the lease, you must give notice by Oct 1 to avoid the full $6,760 early termination fee.',
-        actionLabel: 'Set Reminder',
+          'Si vous prévoyez de rompre le bail, vous devez donner un préavis avant le 1er octobre pour éviter la pénalité complète de résiliation de $6 760.',
+        actionLabel: 'Définir un rappel',
+        category: 'lease',
       },
       {
         id: 't9',
-        title: 'First rent increase possible',
-        dueLabel: 'Nov 1',
-        dueColor: '#e4e2dc',
+        title: 'Première augmentation possible',
+        dueLabel: '1 nov.',
+        dueColor: 'rgba(255,255,255,0.9)',
         completed: false,
         description:
-          'At renewal, your landlord may increase rent up to 8% per the lease clause.',
+          'Lors du renouvellement, votre propriétaire peut augmenter le loyer jusqu\'à 8% selon la clause du bail.',
         whyItMatters:
-          'Knowing when increases can happen lets you plan your budget and negotiate proactively before renewal.',
-        actionLabel: 'Set Reminder',
+          'Connaître les moments d\'augmentation vous permet de planifier votre budget et de négocier proactivement avant le renouvellement.',
+        actionLabel: 'Définir un rappel',
+        category: 'lease',
       },
     ],
   },

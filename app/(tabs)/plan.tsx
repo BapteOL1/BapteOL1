@@ -5,131 +5,759 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Dimensions,
+  Modal,
+  Pressable,
+  TextInput,
+  ActivityIndicator,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, radius, spacing } from '../../constants/theme';
-import {
-  monthlyExpenses,
-  upfrontExpenses,
-  Expense,
-} from '../../data/mockData';
+import { serviceCategories, ServiceCategory, ServiceProvider } from '../../data/mockData';
 
-type Tab = 'monthly' | 'upfront';
+// ─── Status badge ────────────────────────────────────────────────────────────
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const BAR_MAX_WIDTH = SCREEN_WIDTH - spacing.md * 2 - spacing.md * 2 - 140;
-
-function ExpenseRow({ item }: { item: Expense }) {
-  if (item.warning) {
-    return (
-      <View style={rowStyles.row}>
-        <View style={[rowStyles.dot, { backgroundColor: item.color }]} />
-        <View style={rowStyles.rowContent}>
-          <Text style={rowStyles.label}>{item.label}</Text>
-          <View style={rowStyles.warningRow}>
-            <Ionicons name="warning-outline" size={13} color={colors.red} />
-            <Text style={rowStyles.warningText}>Not activated</Text>
-          </View>
-        </View>
-        <Text style={rowStyles.warningAmount}>—</Text>
-      </View>
-    );
-  }
-
+function StatusBadge({ status, label }: { status: ServiceCategory['status']; label: string }) {
+  const map = {
+    booked: { bg: 'rgba(96,48,255,0.18)', color: '#746fff' },
+    active: { bg: 'rgba(137,209,133,0.15)', color: '#89d185' },
+    alert: { bg: colors.redDim, color: colors.red },
+    pending: { bg: 'rgba(255,141,20,0.15)', color: colors.orange },
+    included: { bg: 'rgba(55,148,255,0.15)', color: colors.blue },
+  };
+  const s = map[status];
   return (
-    <View style={rowStyles.row}>
-      <View style={[rowStyles.dot, { backgroundColor: item.color }]} />
-      <View style={rowStyles.rowContent}>
-        <Text style={rowStyles.label}>{item.label}</Text>
-        <View style={rowStyles.barTrack}>
-          <View
-            style={[
-              rowStyles.barFill,
-              {
-                width: Math.max(BAR_MAX_WIDTH * item.barWidth, item.amount > 0 ? 4 : 0),
-                backgroundColor: item.color,
-              },
-            ]}
-          />
-        </View>
-      </View>
-      <Text style={rowStyles.amount}>
-        ${item.amount.toLocaleString()}
-      </Text>
+    <View style={[badgeStyles.wrap, { backgroundColor: s.bg }]}>
+      {status === 'alert' && (
+        <Ionicons name="warning" size={10} color={s.color} style={{ marginRight: 3 }} />
+      )}
+      {status === 'booked' && (
+        <Ionicons name="checkmark" size={10} color={s.color} style={{ marginRight: 3 }} />
+      )}
+      {status === 'active' && (
+        <Ionicons name="checkmark-circle" size={10} color={s.color} style={{ marginRight: 3 }} />
+      )}
+      <Text style={[badgeStyles.text, { color: s.color }]}>{label}</Text>
     </View>
   );
 }
 
-const rowStyles = StyleSheet.create({
-  row: {
+const badgeStyles = StyleSheet.create({
+  wrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 13,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: radius.pill,
   },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: 12,
-    flexShrink: 0,
-  },
-  rowContent: {
-    flex: 1,
-    marginRight: 12,
-  },
-  label: {
-    fontSize: 14,
-    color: colors.text,
-    fontWeight: '500',
-    marginBottom: 5,
-  },
-  barTrack: {
-    height: 4,
-    backgroundColor: colors.border,
-    borderRadius: 2,
-    overflow: 'hidden',
-  },
-  barFill: {
-    height: '100%',
-    borderRadius: 2,
-  },
-  warningRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  warningText: {
-    fontSize: 12,
-    color: colors.red,
-    fontWeight: '600',
-  },
-  amount: {
-    fontSize: 14,
+  text: {
+    fontSize: 10,
     fontWeight: '700',
-    color: colors.text,
-    minWidth: 60,
-    textAlign: 'right',
-  },
-  warningAmount: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: colors.textDim,
-    minWidth: 60,
-    textAlign: 'right',
+    letterSpacing: 0.2,
   },
 });
 
-export default function PlanScreen() {
-  const [activeTab, setActiveTab] = useState<Tab>('monthly');
+// ─── Star rating ─────────────────────────────────────────────────────────────
 
-  const isMonthly = activeTab === 'monthly';
-  const expenses = isMonthly ? monthlyExpenses : upfrontExpenses;
-  const total = isMonthly ? '$4,805' : '$8,460';
-  const totalLabel = isMonthly ? 'Monthly total' : 'Upfront total';
+function Stars({ rating }: { rating: number }) {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+      {[1, 2, 3, 4, 5].map((i) => (
+        <Ionicons
+          key={i}
+          name={i <= Math.round(rating) ? 'star' : 'star-outline'}
+          size={11}
+          color={colors.yellow}
+        />
+      ))}
+    </View>
+  );
+}
+
+// ─── Payment modal ────────────────────────────────────────────────────────────
+
+interface PaymentModalProps {
+  visible: boolean;
+  provider: ServiceProvider | null;
+  category: ServiceCategory | null;
+  onClose: () => void;
+  onConfirm: () => void;
+}
+
+function PaymentModal({ visible, provider, category, onClose, onConfirm }: PaymentModalProps) {
+  const [step, setStep] = useState<'form' | 'processing' | 'done'>('form');
+  const insets = useSafeAreaInsets();
+
+  const handlePay = () => {
+    setStep('processing');
+    setTimeout(() => {
+      setStep('done');
+    }, 1800);
+  };
+
+  const handleClose = () => {
+    setStep('form');
+    onClose();
+  };
+
+  const handleDone = () => {
+    setStep('form');
+    onConfirm();
+  };
+
+  if (!provider || !category) return null;
+
+  return (
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={handleClose}>
+      <Pressable style={pmStyles.overlay} onPress={step === 'form' ? handleClose : undefined}>
+        <Pressable
+          style={[pmStyles.sheet, { paddingBottom: insets.bottom + spacing.md }]}
+          onPress={() => {}}
+        >
+          <View style={pmStyles.grabHandle} />
+
+          {step === 'form' && (
+            <>
+              <Text style={pmStyles.title}>Réserver & Payer</Text>
+              <View style={pmStyles.providerRow}>
+                <View style={[pmStyles.providerDot, { backgroundColor: provider.color }]}>
+                  <Text style={pmStyles.providerInitials}>{provider.initials}</Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={pmStyles.providerName}>{provider.name}</Text>
+                  <Text style={pmStyles.providerPrice}>{provider.price}</Text>
+                </View>
+              </View>
+
+              <View style={pmStyles.divider} />
+
+              <Text style={pmStyles.sectionLabel}>Carte de paiement</Text>
+              <View style={pmStyles.cardRow}>
+                <View style={pmStyles.cardField}>
+                  <Text style={pmStyles.cardFieldLabel}>Numéro</Text>
+                  <TextInput
+                    style={pmStyles.cardInput}
+                    placeholder="•••• •••• •••• 4242"
+                    placeholderTextColor={colors.textDim}
+                    keyboardType="numeric"
+                    editable={false}
+                  />
+                </View>
+              </View>
+              <View style={pmStyles.cardRowSplit}>
+                <View style={[pmStyles.cardField, { flex: 1, marginRight: 8 }]}>
+                  <Text style={pmStyles.cardFieldLabel}>Expiration</Text>
+                  <TextInput
+                    style={pmStyles.cardInput}
+                    placeholder="MM/AA"
+                    placeholderTextColor={colors.textDim}
+                    editable={false}
+                  />
+                </View>
+                <View style={[pmStyles.cardField, { flex: 1 }]}>
+                  <Text style={pmStyles.cardFieldLabel}>CVV</Text>
+                  <TextInput
+                    style={pmStyles.cardInput}
+                    placeholder="•••"
+                    placeholderTextColor={colors.textDim}
+                    editable={false}
+                  />
+                </View>
+              </View>
+
+              <View style={pmStyles.totalRow}>
+                <Text style={pmStyles.totalLabel}>Total</Text>
+                <Text style={pmStyles.totalAmount}>{provider.price}</Text>
+              </View>
+
+              <TouchableOpacity style={pmStyles.payBtn} onPress={handlePay} activeOpacity={0.8}>
+                <Ionicons name="lock-closed" size={14} color={colors.background} />
+                <Text style={pmStyles.payBtnText}>Confirmer le paiement</Text>
+              </TouchableOpacity>
+            </>
+          )}
+
+          {step === 'processing' && (
+            <View style={pmStyles.centerState}>
+              <ActivityIndicator size="large" color={colors.accent} />
+              <Text style={pmStyles.processingText}>Traitement en cours…</Text>
+            </View>
+          )}
+
+          {step === 'done' && (
+            <View style={pmStyles.centerState}>
+              <View style={pmStyles.successCircle}>
+                <Ionicons name="checkmark" size={32} color={colors.background} />
+              </View>
+              <Text style={pmStyles.successTitle}>Réservation confirmée !</Text>
+              <Text style={pmStyles.successSub}>{provider.name} · {provider.price}</Text>
+              <TouchableOpacity style={pmStyles.doneBtn} onPress={handleDone} activeOpacity={0.8}>
+                <Text style={pmStyles.doneBtnText}>Fermer</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Pressable>
+      </Pressable>
+    </Modal>
+  );
+}
+
+const pmStyles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'flex-end',
+  },
+  sheet: {
+    backgroundColor: colors.surface,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    borderTopWidth: 1,
+    borderColor: colors.border,
+    minHeight: 380,
+  },
+  grabHandle: {
+    width: 36,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: colors.border,
+    alignSelf: 'center',
+    marginBottom: spacing.md,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: spacing.md,
+    letterSpacing: -0.3,
+  },
+  providerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: colors.surfaceElevated,
+    borderRadius: radius.card,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+  },
+  providerDot: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  providerInitials: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#fff',
+  },
+  providerName: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: 2,
+  },
+  providerPrice: {
+    fontSize: 13,
+    color: colors.accent,
+    fontWeight: '700',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: colors.border,
+    marginBottom: spacing.md,
+  },
+  sectionLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: colors.textMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+    marginBottom: spacing.sm,
+  },
+  cardRow: {
+    marginBottom: spacing.sm,
+  },
+  cardRowSplit: {
+    flexDirection: 'row',
+    marginBottom: spacing.md,
+  },
+  cardField: {},
+  cardFieldLabel: {
+    fontSize: 11,
+    color: colors.textMuted,
+    marginBottom: 5,
+    fontWeight: '500',
+  },
+  cardInput: {
+    backgroundColor: colors.surfaceElevated,
+    borderRadius: radius.small,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    fontSize: 14,
+    color: colors.textDim,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  totalRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.md,
+    paddingTop: spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  totalLabel: {
+    fontSize: 14,
+    color: colors.textMuted,
+    fontWeight: '600',
+  },
+  totalAmount: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: colors.accent,
+    letterSpacing: -0.4,
+  },
+  payBtn: {
+    backgroundColor: colors.accent,
+    borderRadius: radius.button,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    gap: 8,
+  },
+  payBtnText: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: colors.background,
+  },
+  centerState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 40,
+    gap: 12,
+  },
+  processingText: {
+    fontSize: 15,
+    color: colors.textMuted,
+    marginTop: 8,
+  },
+  successCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: colors.green,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  successTitle: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: colors.text,
+    letterSpacing: -0.3,
+  },
+  successSub: {
+    fontSize: 13,
+    color: colors.textMuted,
+  },
+  doneBtn: {
+    marginTop: spacing.sm,
+    backgroundColor: colors.surfaceElevated,
+    borderRadius: radius.button,
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  doneBtnText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.textMuted,
+  },
+});
+
+// ─── Provider card ────────────────────────────────────────────────────────────
+
+interface ProviderCardProps {
+  provider: ServiceProvider;
+  onBook: (provider: ServiceProvider) => void;
+}
+
+function ProviderCard({ provider, onBook }: ProviderCardProps) {
+  return (
+    <View style={pcStyles.card}>
+      {provider.recommended && (
+        <View style={pcStyles.recommendedBadge}>
+          <Text style={pcStyles.recommendedText}>Recommandé</Text>
+        </View>
+      )}
+
+      <View style={pcStyles.header}>
+        <View style={[pcStyles.logoWrap, { backgroundColor: `${provider.color}22` }]}>
+          <Text style={[pcStyles.logoText, { color: provider.color }]}>{provider.initials}</Text>
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text style={pcStyles.name}>{provider.name}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 3 }}>
+            <Stars rating={provider.rating} />
+            <Text style={pcStyles.ratingText}>
+              {provider.rating} ({provider.reviews})
+            </Text>
+          </View>
+        </View>
+        <View style={{ alignItems: 'flex-end' }}>
+          <Text style={pcStyles.price}>{provider.price}</Text>
+          {provider.selected && (
+            <View style={pcStyles.selectedBadge}>
+              <Ionicons name="checkmark" size={10} color={colors.green} />
+              <Text style={pcStyles.selectedText}>Actif</Text>
+            </View>
+          )}
+        </View>
+      </View>
+
+      <Text style={pcStyles.priceNote}>{provider.priceNote}</Text>
+
+      <View style={pcStyles.featuresWrap}>
+        {provider.features.map((f, i) => (
+          <View key={i} style={pcStyles.featureRow}>
+            <Ionicons name="checkmark-circle" size={13} color={colors.accentBright} style={{ marginTop: 1 }} />
+            <Text style={pcStyles.featureText}>{f}</Text>
+          </View>
+        ))}
+      </View>
+
+      <TouchableOpacity
+        style={[pcStyles.btn, provider.selected ? pcStyles.btnActive : {}]}
+        onPress={() => !provider.selected && onBook(provider)}
+        activeOpacity={0.8}
+      >
+        <Text style={[pcStyles.btnText, provider.selected ? pcStyles.btnTextActive : {}]}>
+          {provider.selected ? 'Prestataire actuel' : 'Sélectionner & Payer'}
+        </Text>
+        {!provider.selected && (
+          <Ionicons name="arrow-forward" size={14} color={colors.background} />
+        )}
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const pcStyles = StyleSheet.create({
+  card: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.card,
+    padding: spacing.md,
+    marginBottom: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  recommendedBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: colors.accentDim,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: radius.pill,
+    marginBottom: spacing.sm,
+  },
+  recommendedText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: colors.accentBright,
+    letterSpacing: 0.3,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+    marginBottom: 6,
+  },
+  logoWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexShrink: 0,
+  },
+  logoText: {
+    fontSize: 14,
+    fontWeight: '800',
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.text,
+    letterSpacing: -0.2,
+  },
+  ratingText: {
+    fontSize: 11,
+    color: colors.textMuted,
+    fontWeight: '500',
+  },
+  price: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: colors.accent,
+    letterSpacing: -0.3,
+  },
+  selectedBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    marginTop: 3,
+  },
+  selectedText: {
+    fontSize: 10,
+    color: colors.green,
+    fontWeight: '700',
+  },
+  priceNote: {
+    fontSize: 12,
+    color: colors.textMuted,
+    marginBottom: spacing.sm,
+    lineHeight: 17,
+  },
+  featuresWrap: {
+    gap: 6,
+    marginBottom: spacing.md,
+  },
+  featureRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+  },
+  featureText: {
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.65)',
+    flex: 1,
+    lineHeight: 18,
+  },
+  btn: {
+    backgroundColor: colors.accent,
+    borderRadius: radius.button,
+    paddingVertical: 13,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 7,
+  },
+  btnActive: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  btnText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.background,
+  },
+  btnTextActive: {
+    color: colors.textMuted,
+  },
+});
+
+// ─── Category row ─────────────────────────────────────────────────────────────
+
+interface CategoryRowProps {
+  category: ServiceCategory;
+  onPress: (cat: ServiceCategory) => void;
+}
+
+function CategoryRow({ category, onPress }: CategoryRowProps) {
+  const selectedProvider = category.providers.find((p) => p.selected);
+
+  return (
+    <TouchableOpacity
+      style={crStyles.row}
+      onPress={() => onPress(category)}
+      activeOpacity={0.72}
+    >
+      <View style={[crStyles.iconWrap, { backgroundColor: `${category.iconColor}18` }]}>
+        <Ionicons name={category.icon as any} size={20} color={category.iconColor} />
+      </View>
+
+      <View style={crStyles.body}>
+        <View style={crStyles.topRow}>
+          <Text style={crStyles.title}>{category.title}</Text>
+          <StatusBadge status={category.status} label={category.statusLabel} />
+        </View>
+        <Text style={crStyles.sub} numberOfLines={1}>
+          {selectedProvider ? selectedProvider.name : category.currentProvider}
+          {category.monthlyCost ? ` · ${category.monthlyCost}` : ''}
+        </Text>
+      </View>
+
+      <Ionicons name="chevron-forward" size={16} color={colors.textDim} />
+    </TouchableOpacity>
+  );
+}
+
+const crStyles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: spacing.md,
+    gap: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  iconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: radius.small,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexShrink: 0,
+  },
+  body: {
+    flex: 1,
+    gap: 3,
+  },
+  topRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+  title: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: colors.text,
+    flex: 1,
+  },
+  sub: {
+    fontSize: 12,
+    color: colors.textMuted,
+  },
+});
+
+// ─── Main screen ──────────────────────────────────────────────────────────────
+
+export default function ServicesScreen() {
+  const [categories, setCategories] = useState(serviceCategories);
+  const [selectedCategory, setSelectedCategory] = useState<ServiceCategory | null>(null);
+  const [paymentTarget, setPaymentTarget] = useState<ServiceProvider | null>(null);
+
+  const totalMonthly = categories.reduce((sum, cat) => {
+    if (!cat.monthlyCost) return sum;
+    const n = parseInt(cat.monthlyCost.replace(/[^0-9]/g, ''), 10);
+    return sum + (isNaN(n) ? 0 : n);
+  }, 0);
+
+  const alertCount = categories.filter((c) => c.status === 'alert').length;
+  const activeCount = categories.filter(
+    (c) => c.status === 'active' || c.status === 'booked'
+  ).length;
+
+  const handleBook = (provider: ServiceProvider) => {
+    setPaymentTarget(provider);
+  };
+
+  const handlePaymentConfirm = () => {
+    if (!paymentTarget || !selectedCategory) return;
+    setCategories((prev) =>
+      prev.map((cat) => {
+        if (cat.id !== selectedCategory.id) return cat;
+        return {
+          ...cat,
+          status: 'active' as const,
+          statusLabel: 'Actif',
+          monthlyCost: paymentTarget.price,
+          currentProvider: paymentTarget.name,
+          providers: cat.providers.map((p) => ({
+            ...p,
+            selected: p.id === paymentTarget.id,
+          })),
+        };
+      })
+    );
+    const updated = categories.find((c) => c.id === selectedCategory.id);
+    if (updated) {
+      setSelectedCategory({
+        ...updated,
+        status: 'active',
+        statusLabel: 'Actif',
+        providers: updated.providers.map((p) => ({
+          ...p,
+          selected: p.id === paymentTarget.id,
+        })),
+      });
+    }
+    setPaymentTarget(null);
+  };
+
+  // ─── Provider list view ───────────────────────────────────────────────────
+
+  if (selectedCategory) {
+    return (
+      <SafeAreaView style={styles.container} edges={['top']}>
+        {/* Back header */}
+        <View style={styles.providerHeader}>
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => setSelectedCategory(null)}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="arrow-back" size={20} color={colors.text} />
+          </TouchableOpacity>
+          <View style={styles.providerHeaderInfo}>
+            <Text style={styles.providerHeaderTitle}>{selectedCategory.title}</Text>
+            <Text style={styles.providerHeaderSub}>
+              {selectedCategory.providers.length} prestataire
+              {selectedCategory.providers.length > 1 ? 's' : ''}
+            </Text>
+          </View>
+          <StatusBadge
+            status={selectedCategory.status}
+            label={selectedCategory.statusLabel}
+          />
+        </View>
+
+        {/* Alert banner for urgent services */}
+        {selectedCategory.status === 'alert' && (
+          <View style={styles.alertBanner}>
+            <Ionicons name="warning" size={14} color={colors.red} />
+            <Text style={styles.alertBannerText}>
+              Action requise — activez ce service avant le 1er avril
+            </Text>
+          </View>
+        )}
+
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.providerScrollContent}
+        >
+          {categories
+            .find((c) => c.id === selectedCategory.id)
+            ?.providers.map((provider) => (
+              <ProviderCard
+                key={provider.id}
+                provider={provider}
+                onBook={handleBook}
+              />
+            ))}
+        </ScrollView>
+
+        <PaymentModal
+          visible={paymentTarget !== null}
+          provider={paymentTarget}
+          category={selectedCategory}
+          onClose={() => setPaymentTarget(null)}
+          onConfirm={handlePaymentConfirm}
+        />
+      </SafeAreaView>
+    );
+  }
+
+  // ─── Category list view ───────────────────────────────────────────────────
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -140,78 +768,76 @@ export default function PlanScreen() {
         {/* Header */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.title}>My Plan</Text>
-            <Text style={styles.subtitle}>{totalLabel}</Text>
+            <Text style={styles.title}>Mes Services</Text>
+            <Text style={styles.subtitle}>Gérez tous vos prestataires NYC</Text>
           </View>
-          <Text style={styles.totalAmount}>{total}</Text>
+          <View style={styles.headerStats}>
+            <Text style={styles.headerTotal}>${totalMonthly}/mo</Text>
+            <Text style={styles.headerTotalLabel}>estimé</Text>
+          </View>
         </View>
 
-        {/* Tab Toggle */}
-        <View style={styles.tabToggle}>
+        {/* Alert banner */}
+        {alertCount > 0 && (
           <TouchableOpacity
-            style={[styles.tabBtn, isMonthly && styles.tabBtnActive]}
-            onPress={() => setActiveTab('monthly')}
-            activeOpacity={0.7}
+            style={styles.globalAlert}
+            activeOpacity={0.8}
+            onPress={() => {
+              const alertCat = categories.find((c) => c.status === 'alert');
+              if (alertCat) setSelectedCategory(alertCat);
+            }}
           >
-            <Text style={[styles.tabBtnText, isMonthly && styles.tabBtnTextActive]}>
-              Monthly
-            </Text>
+            <View style={styles.globalAlertLeft}>
+              <Ionicons name="warning" size={16} color={colors.red} />
+              <View>
+                <Text style={styles.globalAlertTitle}>
+                  {alertCount} service{alertCount > 1 ? 's' : ''} requiert votre attention
+                </Text>
+                <Text style={styles.globalAlertSub}>Appuyez pour résoudre</Text>
+              </View>
+            </View>
+            <Ionicons name="chevron-forward" size={16} color={colors.red} />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tabBtn, !isMonthly && styles.tabBtnActive]}
-            onPress={() => setActiveTab('upfront')}
-            activeOpacity={0.7}
-          >
-            <Text style={[styles.tabBtnText, !isMonthly && styles.tabBtnTextActive]}>
-              Upfront
+        )}
+
+        {/* Stats row */}
+        <View style={styles.statsRow}>
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{activeCount}</Text>
+            <Text style={styles.statLabel}>Actifs</Text>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.statItem}>
+            <Text style={[styles.statValue, alertCount > 0 && { color: colors.red }]}>
+              {alertCount}
             </Text>
-          </TouchableOpacity>
+            <Text style={styles.statLabel}>Alertes</Text>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{categories.length}</Text>
+            <Text style={styles.statLabel}>Services</Text>
+          </View>
         </View>
 
-        {/* Expense List */}
-        <View style={styles.expenseCard}>
-          {expenses.map((item, idx) => (
-            <View key={item.id}>
-              <ExpenseRow item={item} />
+        {/* Category list */}
+        <Text style={styles.sectionLabel}>Tous les services</Text>
+        <View style={styles.categoryCard}>
+          {categories.map((cat, i) => (
+            <View key={cat.id}>
+              <CategoryRow category={cat} onPress={setSelectedCategory} />
+              {i === categories.length - 1 && (
+                <View style={{ height: 1 }} />
+              )}
             </View>
           ))}
-
-          {!isMonthly && (
-            <View style={styles.totalRow}>
-              <Text style={styles.totalRowLabel}>Total upfront</Text>
-              <Text style={styles.totalRowAmount}>$8,460</Text>
-            </View>
-          )}
-
-          {isMonthly && (
-            <View style={styles.noteRow}>
-              <Ionicons name="information-circle-outline" size={14} color={colors.textMuted} />
-              <Text style={styles.noteText}>
-                Electricity estimate (~$345/mo) not included until activated
-              </Text>
-            </View>
-          )}
         </View>
 
-        {/* Summary Card */}
-        <View style={styles.summaryCard}>
-          <View style={styles.summaryRow}>
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Rent ratio</Text>
-              <Text style={styles.summaryValue}>70%</Text>
-            </View>
-            <View style={styles.summaryDivider} />
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Savings buffer</Text>
-              <Text style={[styles.summaryValue, { color: colors.orange }]}>Low</Text>
-            </View>
-            <View style={styles.summaryDivider} />
-            <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>Move-ready</Text>
-              <Text style={[styles.summaryValue, { color: colors.green }]}>68%</Text>
-            </View>
-          </View>
-        </View>
+        {/* Add service */}
+        <TouchableOpacity style={styles.addServiceBtn} activeOpacity={0.7}>
+          <Ionicons name="add-circle-outline" size={18} color={colors.textMuted} />
+          <Text style={styles.addServiceText}>Ajouter un service</Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -231,7 +857,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.md,
     paddingTop: spacing.xs,
   },
   title: {
@@ -245,113 +871,165 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.textMuted,
   },
-  totalAmount: {
-    fontSize: 30,
+  headerStats: {
+    alignItems: 'flex-end',
+  },
+  headerTotal: {
+    fontSize: 26,
     fontWeight: '800',
     color: colors.accent,
     letterSpacing: -1,
   },
-  tabToggle: {
-    flexDirection: 'row',
-    backgroundColor: colors.surface,
-    borderRadius: radius.button,
-    padding: 3,
-    marginBottom: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  tabBtn: {
-    flex: 1,
-    paddingVertical: 9,
-    alignItems: 'center',
-    borderRadius: radius.button - 1,
-  },
-  tabBtnActive: {
-    backgroundColor: colors.accent,
-  },
-  tabBtnText: {
-    fontSize: 14,
-    fontWeight: '600',
+  headerTotalLabel: {
+    fontSize: 11,
     color: colors.textMuted,
+    textAlign: 'right',
   },
-  tabBtnTextActive: {
-    color: colors.primary,
-  },
-  expenseCard: {
-    backgroundColor: colors.surface,
+  globalAlert: {
+    backgroundColor: colors.redDim,
     borderRadius: radius.card,
-    paddingHorizontal: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginBottom: spacing.sm,
-  },
-  totalRow: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    paddingHorizontal: spacing.md,
     paddingVertical: 14,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    marginTop: 2,
+    marginBottom: spacing.sm,
+    borderWidth: 1,
+    borderColor: `${colors.red}40`,
   },
-  totalRowLabel: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: colors.text,
-  },
-  totalRowAmount: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: colors.accent,
-    letterSpacing: -0.5,
-  },
-  noteRow: {
+  globalAlertLeft: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 6,
-    paddingVertical: 12,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-  },
-  noteText: {
-    fontSize: 12,
-    color: colors.textMuted,
+    alignItems: 'center',
+    gap: 10,
     flex: 1,
-    lineHeight: 17,
   },
-  summaryCard: {
+  globalAlertTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.red,
+    marginBottom: 2,
+  },
+  globalAlertSub: {
+    fontSize: 12,
+    color: `${colors.red}aa`,
+  },
+  statsRow: {
     backgroundColor: colors.surface,
     borderRadius: radius.card,
-    borderWidth: 1,
-    borderColor: colors.border,
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: spacing.md,
   },
-  summaryRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  summaryItem: {
+  statItem: {
     flex: 1,
     alignItems: 'center',
   },
-  summaryLabel: {
+  statValue: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: colors.text,
+    letterSpacing: -0.5,
+    marginBottom: 3,
+  },
+  statLabel: {
     fontSize: 10,
     color: colors.textMuted,
     textTransform: 'uppercase',
     letterSpacing: 0.4,
     fontWeight: '500',
-    marginBottom: 5,
   },
-  summaryValue: {
-    fontSize: 16,
+  statDivider: {
+    width: 1,
+    height: 36,
+    backgroundColor: colors.border,
+  },
+  sectionLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: colors.textMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+    marginBottom: spacing.sm,
+  },
+  categoryCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.card,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: spacing.sm,
+  },
+  addServiceBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 14,
+    borderRadius: radius.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderStyle: 'dashed',
+  },
+  addServiceText: {
+    fontSize: 14,
+    color: colors.textMuted,
+    fontWeight: '500',
+  },
+  // Provider detail view
+  providerHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing.md,
+    paddingVertical: 14,
+    gap: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  backBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: colors.surfaceElevated,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexShrink: 0,
+  },
+  providerHeaderInfo: {
+    flex: 1,
+  },
+  providerHeaderTitle: {
+    fontSize: 17,
     fontWeight: '700',
     color: colors.text,
-    letterSpacing: -0.3,
+    letterSpacing: -0.2,
   },
-  summaryDivider: {
-    width: 1,
-    height: 32,
-    backgroundColor: colors.border,
+  providerHeaderSub: {
+    fontSize: 12,
+    color: colors.textMuted,
+    marginTop: 2,
+  },
+  alertBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: colors.redDim,
+    paddingHorizontal: spacing.md,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: `${colors.red}30`,
+  },
+  alertBannerText: {
+    fontSize: 13,
+    color: colors.red,
+    flex: 1,
+    fontWeight: '500',
+  },
+  providerScrollContent: {
+    padding: spacing.md,
+    paddingBottom: spacing.xl + 8,
   },
 });
