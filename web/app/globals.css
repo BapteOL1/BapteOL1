@@ -1,0 +1,91 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@800&family=DM+Sans:wght@400;600&family=DM+Mono:wght@400&display=swap");
+
+/* ─── Settle Design Tokens ─────────────────────────────────────── */
+@theme inline {
+  /* Brand palette */
+  --color-navy:     #0a1628;
+  --color-amber:    #c8a97a;
+  --color-cream:    #f7f4ee;
+  --color-elec:     #5b9ef5;
+  --color-obsidian: #111110;
+  --color-success:  #4aaa76;
+  --color-alert:    #c0503e;
+
+  /* Semantic */
+  --color-primary:        #0a1628;
+  --color-accent:         #c8a97a;
+  --color-accent-bright:  #d4b98a;
+  --color-accent-dim:     rgba(200, 169, 122, 0.15);
+
+  --color-bg:              #111110;
+  --color-surface:         #13203a;
+  --color-surface-elevated:#1a2d4a;
+
+  --color-text:       #f0ece4;
+  --color-text-muted: rgba(240, 236, 228, 0.55);
+  --color-text-dim:   rgba(240, 236, 228, 0.25);
+
+  --color-border:        #1e3355;
+  --color-border-bright: #2a4570;
+
+  --color-red:        #c0503e;
+  --color-red-dim:    rgba(192, 80, 62, 0.15);
+  --color-green:      #4aaa76;
+  --color-green-dim:  rgba(74, 170, 118, 0.15);
+  --color-orange:     #e8954a;
+  --color-orange-dim: rgba(232, 149, 74, 0.15);
+  --color-blue:       #5b9ef5;
+  --color-blue-dim:   rgba(91, 158, 245, 0.15);
+  --color-tab-bar:    #080f1e;
+
+  /* Typography */
+  --font-title: 'Sora', sans-serif;
+  --font-body:  'DM Sans', sans-serif;
+  --font-mono:  'DM Mono', monospace;
+
+  /* Radius */
+  --radius-card:   16px;
+  --radius-button: 12px;
+  --radius-small:  8px;
+  --radius-pill:   9999px;
+  --radius-xs:     4px;
+
+  /* Spacing */
+  --spacing-xs:  4px;
+  --spacing-sm:  8px;
+  --spacing-md:  16px;
+  --spacing-lg:  24px;
+  --spacing-xl:  32px;
+  --spacing-xxl: 48px;
+}
+
+/* ─── Base styles ──────────────────────────────────────────────── */
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+body {
+  min-height: 100dvh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-title);
+  font-weight: 800;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
