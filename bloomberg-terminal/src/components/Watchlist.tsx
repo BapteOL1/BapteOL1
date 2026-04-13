@@ -86,8 +86,12 @@ export function Watchlist({ watchlist, onAddTicker, onRemoveTicker, onTickerSele
               <SortHeader field="last" label="Last" align="right" />
               <SortHeader field="change" label="Chg" align="right" />
               <SortHeader field="changePercent" label="Chg%" align="right" />
-              <SortHeader field="volume" label="Vol" align="right" />
-              <SortHeader field="marketCap" label="MCap" align="right" />
+              <th className="px-2 py-1 text-[9px] text-bb-amber uppercase tracking-wider cursor-pointer hover:text-bb-white select-none text-right hidden md:table-cell" onClick={() => handleSort('volume')}>
+                Vol{sortField === 'volume' && <span className="ml-1 text-[8px]">{sortDir === 'asc' ? '▲' : '▼'}</span>}
+              </th>
+              <th className="px-2 py-1 text-[9px] text-bb-amber uppercase tracking-wider cursor-pointer hover:text-bb-white select-none text-right hidden md:table-cell" onClick={() => handleSort('marketCap')}>
+                MCap{sortField === 'marketCap' && <span className="ml-1 text-[8px]">{sortDir === 'asc' ? '▲' : '▼'}</span>}
+              </th>
               <th className="w-6"></th>
             </tr>
           </thead>
@@ -108,15 +112,15 @@ export function Watchlist({ watchlist, onAddTicker, onRemoveTicker, onTickerSele
                   <td className={`px-2 py-[5px] text-[11px] text-right tabular-nums ${isUp ? 'text-bb-green' : 'text-bb-red'}`}>
                     {isUp ? '+' : ''}{item.changePercent.toFixed(2)}%
                   </td>
-                  <td className="px-2 py-[5px] text-[10px] text-bb-dim text-right">{item.volume}</td>
-                  <td className="px-2 py-[5px] text-[10px] text-bb-dim text-right">{item.marketCap}</td>
+                  <td className="px-2 py-[5px] text-[10px] text-bb-dim text-right hidden md:table-cell">{item.volume}</td>
+                  <td className="px-2 py-[5px] text-[10px] text-bb-dim text-right hidden md:table-cell">{item.marketCap}</td>
                   <td className="px-1">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         onRemoveTicker(item.symbol);
                       }}
-                      className="text-[10px] text-bb-dim hover:text-bb-red transition-colors"
+                      className="text-[10px] text-bb-dim hover:text-bb-red active:text-bb-red transition-colors"
                       title="Remove"
                     >
                       ✕

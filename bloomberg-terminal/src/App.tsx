@@ -37,7 +37,7 @@ export default function App() {
   useKeyboardShortcuts(handlers());
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-bb-black overflow-hidden">
+    <div className="h-screen w-screen flex flex-col bg-bb-black overflow-hidden md:overflow-hidden">
       {/* Top Bar */}
       <TopBar
         activeTab={activeTab}
@@ -46,48 +46,43 @@ export default function App() {
         onTickerSelect={handleTickerSelect}
       />
 
-      {/* Main 4-panel Grid */}
-      <div
-        className="flex-1 overflow-hidden"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '2fr 3fr',
-          gridTemplateRows: '1fr 1fr',
-          gap: '2px',
-          padding: '2px',
-        }}
-      >
-        <div className="min-h-0 min-w-0">
-          <MarketOverview
-            indices={indices}
-            focused={focusedPanel === 1}
-            onTickerSelect={handleTickerSelect}
-          />
-        </div>
-        <div className="min-h-0 min-w-0">
-          <InteractiveChart
-            data={candleData}
-            ticker={selectedTicker}
-            timeframe={timeframe}
-            onTimeframeChange={setTimeframe}
-            loading={chartLoading}
-            focused={focusedPanel === 2}
-          />
-        </div>
-        <div className="min-h-0 min-w-0">
-          <NewsFeed
-            news={news}
-            focused={focusedPanel === 3}
-          />
-        </div>
-        <div className="min-h-0 min-w-0">
-          <Watchlist
-            watchlist={watchlist}
-            onAddTicker={addTicker}
-            onRemoveTicker={removeTicker}
-            onTickerSelect={handleTickerSelect}
-            focused={focusedPanel === 4}
-          />
+      {/* Main 4-panel Grid — desktop: 2x2, mobile: stacked scroll */}
+      <div className="flex-1 overflow-hidden max-md:overflow-y-auto">
+        <div
+          className="h-full p-[2px] gap-[2px] grid grid-cols-1 max-md:h-auto md:grid-cols-[2fr_3fr] md:grid-rows-2"
+        >
+          <div className="min-h-[280px] md:min-h-0 min-w-0">
+            <MarketOverview
+              indices={indices}
+              focused={focusedPanel === 1}
+              onTickerSelect={handleTickerSelect}
+            />
+          </div>
+          <div className="min-h-[320px] md:min-h-0 min-w-0">
+            <InteractiveChart
+              data={candleData}
+              ticker={selectedTicker}
+              timeframe={timeframe}
+              onTimeframeChange={setTimeframe}
+              loading={chartLoading}
+              focused={focusedPanel === 2}
+            />
+          </div>
+          <div className="min-h-[300px] md:min-h-0 min-w-0">
+            <NewsFeed
+              news={news}
+              focused={focusedPanel === 3}
+            />
+          </div>
+          <div className="min-h-[300px] md:min-h-0 min-w-0">
+            <Watchlist
+              watchlist={watchlist}
+              onAddTicker={addTicker}
+              onRemoveTicker={removeTicker}
+              onTickerSelect={handleTickerSelect}
+              focused={focusedPanel === 4}
+            />
+          </div>
         </div>
       </div>
 

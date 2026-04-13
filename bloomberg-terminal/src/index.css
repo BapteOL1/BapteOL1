@@ -32,6 +32,14 @@ html, body, #root {
   line-height: 1.4;
 }
 
+@media (max-width: 768px) {
+  html, body, #root {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 11px;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -47,20 +55,6 @@ html, body, #root {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
-}
-
-.react-grid-item > .react-resizable-handle::after {
-  border-right-color: #FF9500 !important;
-  border-bottom-color: #FF9500 !important;
-}
-
-.react-grid-layout {
-  position: relative;
-}
-
-.react-grid-item.react-grid-placeholder {
-  background: #FF9500 !important;
-  opacity: 0.1 !important;
 }
 
 @keyframes blink {

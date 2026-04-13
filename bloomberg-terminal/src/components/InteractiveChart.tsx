@@ -29,12 +29,13 @@ export function InteractiveChart({
   useEffect(() => {
     if (!chartContainerRef.current) return;
 
+    const isMobile = window.innerWidth < 768;
     const chart = createChart(chartContainerRef.current, {
       layout: {
         background: { color: '#000000' },
         textColor: '#888888',
         fontFamily: 'JetBrains Mono, SF Mono, monospace',
-        fontSize: 10,
+        fontSize: isMobile ? 8 : 10,
       },
       grid: {
         vertLines: { color: '#1a1a1a' },
@@ -124,15 +125,15 @@ export function InteractiveChart({
   return (
     <div className={`h-full flex flex-col border border-bb-border bg-bb-black overflow-hidden ${focused ? 'panel-focus' : ''}`}>
       {/* Header */}
-      <div className="flex items-center justify-between px-3 py-1 border-b border-bb-border bg-[#0a0a0a]">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-between px-2 md:px-3 py-1 border-b border-bb-border bg-[#0a0a0a] gap-1">
+        <div className="flex items-center gap-2 md:gap-3">
           <span className="text-bb-amber text-[11px] font-bold uppercase tracking-wider">{ticker}</span>
           {lastCandle && (
             <>
-              <span className={`text-[12px] font-bold tabular-nums ${isUp ? 'text-bb-green' : 'text-bb-red'}`}>
+              <span className={`text-[11px] md:text-[12px] font-bold tabular-nums ${isUp ? 'text-bb-green' : 'text-bb-red'}`}>
                 {lastCandle.close.toFixed(2)}
               </span>
-              <span className={`text-[10px] tabular-nums ${isUp ? 'text-bb-green' : 'text-bb-red'}`}>
+              <span className={`text-[9px] md:text-[10px] tabular-nums ${isUp ? 'text-bb-green' : 'text-bb-red'}`}>
                 {isUp ? '▲' : '▼'} {Math.abs(lastCandle.close - lastCandle.open).toFixed(2)} ({((lastCandle.close - lastCandle.open) / lastCandle.open * 100).toFixed(2)}%)
               </span>
             </>
@@ -143,10 +144,10 @@ export function InteractiveChart({
             <button
               key={tf}
               onClick={() => onTimeframeChange(tf)}
-              className={`px-2 py-[2px] text-[10px] transition-colors ${
+              className={`px-[6px] md:px-2 py-[2px] text-[9px] md:text-[10px] transition-colors ${
                 timeframe === tf
                   ? 'text-bb-black bg-bb-amber font-bold'
-                  : 'text-bb-dim hover:text-bb-white'
+                  : 'text-bb-dim hover:text-bb-white active:text-bb-white'
               }`}
             >
               {tf}
@@ -167,12 +168,12 @@ export function InteractiveChart({
 
       {/* Footer */}
       {lastCandle && (
-        <div className="flex items-center gap-4 px-3 py-1 border-t border-bb-border bg-[#0a0a0a] text-[9px] text-bb-dim">
-          <span>O: <span className="text-bb-white">{lastCandle.open.toFixed(2)}</span></span>
-          <span>H: <span className="text-bb-white">{lastCandle.high.toFixed(2)}</span></span>
-          <span>L: <span className="text-bb-white">{lastCandle.low.toFixed(2)}</span></span>
-          <span>C: <span className={isUp ? 'text-bb-green' : 'text-bb-red'}>{lastCandle.close.toFixed(2)}</span></span>
-          <span>V: <span className="text-bb-white">{(lastCandle.volume / 1e6).toFixed(1)}M</span></span>
+        <div className="flex items-center gap-2 md:gap-4 px-2 md:px-3 py-1 border-t border-bb-border bg-[#0a0a0a] text-[8px] md:text-[9px] text-bb-dim overflow-x-auto">
+          <span className="shrink-0">O: <span className="text-bb-white">{lastCandle.open.toFixed(2)}</span></span>
+          <span className="shrink-0">H: <span className="text-bb-white">{lastCandle.high.toFixed(2)}</span></span>
+          <span className="shrink-0">L: <span className="text-bb-white">{lastCandle.low.toFixed(2)}</span></span>
+          <span className="shrink-0">C: <span className={isUp ? 'text-bb-green' : 'text-bb-red'}>{lastCandle.close.toFixed(2)}</span></span>
+          <span className="shrink-0">V: <span className="text-bb-white">{(lastCandle.volume / 1e6).toFixed(1)}M</span></span>
         </div>
       )}
     </div>

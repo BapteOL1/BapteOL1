@@ -54,30 +54,28 @@ export function MarketOverview({ indices, focused, onTickerSelect }: MarketOverv
                 </div>
               </div>
 
-              {/* Sparkline */}
-              <div className="mx-3 shrink-0">
+              {/* Sparkline — hidden on mobile */}
+              <div className="mx-3 shrink-0 hidden md:block">
                 <Sparkline data={idx.sparklineData} color={color} />
               </div>
 
               {/* Price */}
-              <div className="text-right shrink-0 w-[90px]">
-                <div className="text-bb-white text-[11px] font-bold tabular-nums">
+              <div className="text-right shrink-0 w-[70px] md:w-[90px]">
+                <div className="text-bb-white text-[10px] md:text-[11px] font-bold tabular-nums">
                   {idx.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
               </div>
 
               {/* Change */}
-              <div className="text-right shrink-0 w-[100px]">
-                <div className={`text-[11px] tabular-nums ${isUp ? 'text-bb-green' : 'text-bb-red'}`}>
-                  {isUp ? '+' : ''}{idx.change.toFixed(2)}
-                  <span className="ml-1">
-                    ({isUp ? '+' : ''}{idx.changePercent.toFixed(2)}%)
-                  </span>
+              <div className="text-right shrink-0 w-[60px] md:w-[100px]">
+                <div className={`text-[10px] md:text-[11px] tabular-nums ${isUp ? 'text-bb-green' : 'text-bb-red'}`}>
+                  <span className="hidden md:inline">{isUp ? '+' : ''}{idx.change.toFixed(2)} </span>
+                  <span>({isUp ? '+' : ''}{idx.changePercent.toFixed(2)}%)</span>
                 </div>
               </div>
 
               {/* Arrow */}
-              <div className={`ml-2 text-[10px] ${isUp ? 'text-bb-green' : 'text-bb-red'}`}>
+              <div className={`ml-1 md:ml-2 text-[10px] ${isUp ? 'text-bb-green' : 'text-bb-red'}`}>
                 {isUp ? '▲' : '▼'}
               </div>
             </div>
