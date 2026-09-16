@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Verizon iPhone Cost Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;800&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1628; --amber:#c8a97a; --cream:#f7f4ee; --elec:#5b9ef5;
+  --success:#4aaa76; --alert:#c0503e;
+
+  --ground:#efeae0;
+  --surface:#fbf9f5;
+  --surface-2:#f2ede3;
+  --line:#ddd5c6;
+  --line-strong:#c4b9a4;
+  --ink:#0a1628;
+  --ink-2:#4a5468;
+  --ink-3:#7b8393;
+  --accent:#8a6d33;
+  --accent-bg:rgba(200,169,122,.22);
+
+  --s1:#a8761a; --s2:#2a78d6; --s3:#1baf7a; --s4:#7b5ce0; --s5:#e34948;
+
+  --good:#2f7d55; --good-bg:rgba(74,170,118,.16);
+  --bad:#a63e2e;  --bad-bg:rgba(192,80,62,.14);
+
+  --r-card:16px; --r-btn:12px;
+  padding: env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0a1628; --surface:#13203a; --surface-2:#1a2d4a;
+    --line:#1e3355; --line-strong:#2a4570;
+    --ink:#f0ece4; --ink-2:rgba(240,236,228,.66); --ink-3:rgba(240,236,228,.42);
+    --accent:#d9bd8c; --accent-bg:rgba(200,169,122,.14);
+    --s1:#b5842a; --s2:#3987e5; --s3:#199e70; --s4:#8b80e4; --s5:#e34948;
+    --good:#5cc08c; --good-bg:rgba(74,170,118,.16);
+    --bad:#e8796a;  --bad-bg:rgba(192,80,62,.18);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0a1628; --surface:#13203a; --surface-2:#1a2d4a;
+  --line:#1e3355; --line-strong:#2a4570;
+  --ink:#f0ece4; --ink-2:rgba(240,236,228,.66); --ink-3:rgba(240,236,228,.42);
+  --accent:#d9bd8c; --accent-bg:rgba(200,169,122,.14);
+  --s1:#b5842a; --s2:#3987e5; --s3:#199e70; --s4:#8b80e4; --s5:#e34948;
+  --good:#5cc08c; --good-bg:rgba(74,170,118,.16);
+  --bad:#e8796a;  --bad-bg:rgba(192,80,62,.18);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px; margin:0 auto; padding:0 16px; padding-block:28px 64px}
+h1,h2,h3{font-family:Sora,"DM Sans",sans-serif; font-weight:800; margin:0; text-wrap:balance; letter-spacing:-.02em}
+h1{font-size:clamp(28px,4.4vw,42px); line-height:1.08}
+h2{font-size:clamp(19px,2.4vw,24px); line-height:1.2}
+h3{font-size:16px; font-weight:600}
+p{margin:0}
+.mono{font-family:"DM Mono",ui-monospace,monospace}
+.eyebrow{font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3)}
+.num{font-variant-numeric:tabular-nums}
+
+/* ── header ─────────────────────────────────────────── */
+header{display:flex; flex-direction:column; gap:14px; padding-bottom:26px; border-bottom:1px solid var(--line)}
+.hrow{display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.lede{max-width:64ch; color:var(--ink-2); font-size:16px}
+.stamp{font-family:"DM Mono",monospace; font-size:11px; color:var(--ink-3); text-align:right; line-height:1.7}
+.themebtn{border:1px solid var(--line-strong); background:transparent; color:var(--ink-2); font-family:"DM Mono",monospace;
+  font-size:11px; letter-spacing:.08em; padding:7px 12px; border-radius:var(--r-btn); cursor:pointer}
+.themebtn:hover{background:var(--surface-2)}
+
+/* ── verdict ────────────────────────────────────────── */
+.verdict{margin-top:26px; background:var(--navy); color:#f0ece4; border-radius:var(--r-card); padding:26px 24px;
+  display:flex; flex-direction:column; gap:18px; border:1px solid var(--line)}
+:root[data-theme="dark"] .verdict, :root:not([data-theme="light"]) .verdict{border-color:var(--line-strong)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .verdict{background:#060e1c}}
+.verdict h2{color:#fff}
+.verdict .kicker{color:var(--amber); font-family:"DM Mono",monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase}
+.findings{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1px; background:rgba(240,236,228,.16); border-radius:12px; overflow:hidden}
+.finding{background:var(--navy); padding:16px 16px 18px; display:flex; flex-direction:column; gap:7px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .finding{background:#060e1c}}
+:root[data-theme="dark"] .finding{background:#060e1c}
+.finding .big{font-family:Sora,sans-serif; font-weight:800; font-size:27px; color:var(--amber); line-height:1; font-variant-numeric:tabular-nums}
+.finding .t{font-weight:600; font-size:14px; color:#fff}
+.finding .d{font-size:13px; color:rgba(240,236,228,.62); line-height:1.45}
+
+/* ── controls ───────────────────────────────────────── */
+.controls{margin-top:26px; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-card); padding:18px}
+.ctl-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px 16px; margin-top:14px}
+.field{display:flex; flex-direction:column; gap:6px; min-width:0}
+.field label{font-family:"DM Mono",monospace; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3)}
+.field input,.field select{
+  font-family:"DM Mono",monospace; font-size:14px; color:var(--ink); background:var(--ground);
+  border:1px solid var(--line-strong); border-radius:10px; padding:9px 10px; width:100%; min-width:0;
+}
+.field input:focus,.field select:focus{outline:2px solid var(--elec); outline-offset:1px; border-color:var(--elec)}
+.seg{display:flex; border:1px solid var(--line-strong); border-radius:10px; overflow:hidden}
+.seg button{flex:1; border:0; background:var(--ground); color:var(--ink-2); font-family:"DM Mono",monospace; font-size:12px;
+  padding:9px 4px; cursor:pointer; white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--navy); color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .seg button[aria-pressed="true"]{background:var(--amber); color:#0a1628}}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{background:var(--amber); color:#0a1628}
+
+/* ── sections / cards ───────────────────────────────── */
+section{margin-top:40px}
+.sechead{display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:6px}
+.sub{color:var(--ink-2); font-size:14.5px; max-width:70ch; margin-top:4px}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-card); padding:20px 18px; margin-top:16px}
+
+.ranks{display:grid; grid-template-columns:repeat(auto-fit,minmax(196px,1fr)); gap:12px; margin-top:16px}
+.rank{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-card); padding:15px 15px 16px;
+  display:flex; flex-direction:column; gap:9px; position:relative; overflow:hidden}
+.rank::before{content:""; position:absolute; inset:0 auto 0 0; width:3px; background:var(--c)}
+.rank.win{border-color:var(--good); box-shadow:0 0 0 1px var(--good)}
+.rank .pos{font-family:"DM Mono",monospace; font-size:10.5px; letter-spacing:.1em; color:var(--ink-3); text-transform:uppercase}
+.rank .nm{font-family:Sora,sans-serif; font-weight:600; font-size:14.5px; line-height:1.25}
+.rank .amt{font-family:Sora,sans-serif; font-weight:800; font-size:26px; line-height:1; font-variant-numeric:tabular-nums}
+.rank .per{font-family:"DM Mono",monospace; font-size:12px; color:var(--ink-2)}
+.rank .tags{display:flex; flex-wrap:wrap; gap:5px; margin-top:2px}
+.tag{font-family:"DM Mono",monospace; font-size:10px; letter-spacing:.04em; padding:3px 7px; border-radius:999px;
+  border:1px solid var(--line-strong); color:var(--ink-2)}
+.tag.ok{color:var(--good); border-color:var(--good); background:var(--good-bg)}
+.tag.no{color:var(--bad); border-color:var(--bad); background:var(--bad-bg)}
+
+/* ── charts ─────────────────────────────────────────── */
+.chart{width:100%; display:block; overflow:visible}
+.chart text{font-family:"DM Mono",monospace; fill:var(--ink-2)}
+.chart .axis-line{stroke:var(--line); stroke-width:1}
+.chart .grid{stroke:var(--line); stroke-width:1; stroke-dasharray:2 4}
+.legend{display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:14px; font-size:12.5px; color:var(--ink-2)}
+.legend span{display:inline-flex; align-items:center; gap:7px; font-family:"DM Mono",monospace}
+.legend i{width:11px; height:11px; border-radius:3px; display:inline-block; flex:none}
+.tipbox{position:absolute; pointer-events:none; opacity:0; transform:translate(-50%,-100%);
+  background:var(--navy); color:#f0ece4; border-radius:10px; padding:9px 11px; font-family:"DM Mono",monospace;
+  font-size:11.5px; line-height:1.6; white-space:nowrap; box-shadow:0 6px 20px rgba(10,22,40,.35); transition:opacity .1s; z-index:5}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tipbox{background:#040b16; border:1px solid var(--line-strong)}}
+:root[data-theme="dark"] .tipbox{background:#040b16; border:1px solid var(--line-strong)}
+.tipbox b{color:var(--amber); font-weight:500}
+.chart-holder{position:relative}
+.scroller{overflow-x:auto; -webkit-overflow-scrolling:touch}
+
+/* ── table ──────────────────────────────────────────── */
+table{border-collapse:collapse; width:100%; min-width:760px; font-size:13.5px}
+th,td{padding:11px 12px; text-align:right; border-bottom:1px solid var(--line); white-space:nowrap}
+th:first-child,td:first-child{text-align:left; white-space:normal; min-width:180px}
+thead th{font-family:"DM Mono",monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3);
+  border-bottom:1px solid var(--line-strong); vertical-align:bottom}
+tbody td{font-family:"DM Mono",monospace; font-variant-numeric:tabular-nums; color:var(--ink)}
+tbody td:first-child{font-family:"DM Sans",sans-serif; font-weight:600}
+tbody tr:hover td{background:var(--surface-2)}
+.swatch{display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:8px; vertical-align:baseline}
+
+/* ── guide ──────────────────────────────────────────── */
+.guide{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:12px; margin-top:16px}
+.gcard{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-card); padding:16px; display:flex; flex-direction:column; gap:8px}
+.gcard .who{font-family:"DM Mono",monospace; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3)}
+.gcard .pick{font-family:Sora,sans-serif; font-weight:800; font-size:17px; color:var(--accent); line-height:1.2}
+.gcard .why{font-size:13.5px; color:var(--ink-2); line-height:1.5}
+
+/* ── notes ──────────────────────────────────────────── */
+.notes{margin-top:40px; padding-top:22px; border-top:1px solid var(--line); font-size:13px; color:var(--ink-2)}
+.notes ul{margin:12px 0 0; padding-left:18px; display:flex; flex-direction:column; gap:8px}
+.notes a{color:var(--elec)}
+.conf{font-family:"DM Mono",monospace; font-size:10px; letter-spacing:.05em; padding:2px 6px; border-radius:4px;
+  border:1px solid var(--line-strong); color:var(--ink-3); margin-right:7px; white-space:nowrap}
+.conf.c{color:var(--good); border-color:var(--good)}
+.conf.l{color:var(--elec); border-color:var(--elec)}
+.conf.g{color:var(--bad); border-color:var(--bad)}
+.callout{background:var(--accent-bg); border:1px solid var(--line-strong); border-radius:12px; padding:14px 16px; font-size:13.5px; color:var(--ink-2); margin-top:16px}
+.callout b{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="hrow">
+    <div>
+      <p class="eyebrow">Settle · carrier analysis · Sept 2026</p>
+      <h1 style="margin-top:8px">Verizon &amp; the iPhone 18&nbsp;Pro</h1>
+      <p class="lede" style="margin-top:12px">Five real ways to get the new iPhone on Verizon's network, priced over three years with the plan cost included — because the phone deal and the plan are the same decision.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:10px">
+      <button class="themebtn" id="themeToggle" type="button">THEME</button>
+      <p class="stamp">Fall 2026 line-up<br>iPhone 18 Pro / Pro Max only<br>(iPhone 18 ships spring 2027)</p>
+    </div>
+  </div>
+</header>
+
+<div class="verdict">
+  <p class="kicker">The answer you didn't want</p>
+  <h2>The trade-in credit is the wrong thing to shop on.</h2>
+  <p style="color:rgba(240,236,228,.72); max-width:66ch; font-size:15px">
+    Verizon advertises up to $1,200 off. That credit is paid back to you $33 at a time over 36 months,
+    and the plan tier that unlocks the biggest number costs $25/month more than the cheapest one.
+    Over the same 36 months that surcharge is <b style="color:#fff">$900</b> — which eats most of the extra credit.
+    Shop the monthly plan first, the credit second.
+  </p>
+  <div class="findings" id="findings"></div>
+</div>
+
+<div class="controls">
+  <p class="eyebrow">Your situation — change anything, every number below recalculates</p>
+  <div class="ctl-grid">
+    <div class="field">
+      <label for="model">iPhone</label>
+      <select id="model">
+        <option value="1199">18 Pro · 256 GB</option>
+        <option value="1399">18 Pro · 512 GB</option>
+        <option value="1299">18 Pro Max · 256 GB</option>
+        <option value="1499">18 Pro Max · 512 GB</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="price">Retail price ($)</label>
+      <input id="price" type="number" min="0" step="10" value="1199">
+    </div>
+    <div class="field">
+      <label for="lines">Lines on the account</label>
+      <select id="lines">
+        <option value="1">1 line</option><option value="2">2 lines</option>
+        <option value="3">3 lines</option><option value="4">4 lines</option><option value="5">5 lines</option>
+      </select>
+    </div>
+    <div class="field">
+      <label id="lblCust">You are</label>
+      <div class="seg" role="group" aria-labelledby="lblCust">
+        <button type="button" id="custSwitch" aria-pressed="true">Switching in</button>
+        <button type="button" id="custUp" aria-pressed="false">Upgrading</button>
+      </div>
+    </div>
+    <div class="field">
+      <label for="credit">Trade-in credit, top tier ($)</label>
+      <input id="credit" type="number" min="0" step="10" value="1200">
+    </div>
+    <div class="field">
+      <label for="creditW">Credit on Welcome ($)</label>
+      <input id="creditW" type="number" min="0" step="10" value="830">
+    </div>
+    <div class="field">
+      <label for="tax">Taxes + fees / line / mo ($)</label>
+      <input id="tax" type="number" min="0" step="1" value="8">
+    </div>
+    <div class="field">
+      <label for="resale">Resale value at 36 mo ($)</label>
+      <input id="resale" type="number" min="0" step="25" value="350">
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="sechead">
+    <div>
+      <p class="eyebrow">Ranked by what you actually pay</p>
+      <h2>Three years, all-in</h2>
+    </div>
+  </div>
+  <p class="sub">Phone + plan + taxes for 36 months, minus what the handset is still worth if you own it at the end. The ranking flips as soon as you change the line count — check it against your own account.</p>
+  <div class="ranks" id="ranks"></div>
+</section>
+
+<section>
+  <div class="sechead">
+    <div>
+      <p class="eyebrow">Same data, to scale</p>
+      <h2>Where the money goes</h2>
+    </div>
+  </div>
+  <p class="sub">Service is the tall bar in every option. The handset — the thing the ads are about — is the short one.</p>
+  <div class="panel chart-holder">
+    <div class="scroller"><svg id="barChart" class="chart" role="img" aria-label="36-month cost split between service and handset for five Verizon options"></svg></div>
+    <div class="legend" id="barLegend"></div>
+    <div class="tipbox" id="barTip"></div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead">
+    <div>
+      <p class="eyebrow">Cumulative out-of-pocket</p>
+      <h2>Month by month</h2>
+    </div>
+  </div>
+  <p class="sub">Buying the phone outright starts $1,199 in the hole and still finishes first. Hover to read any month.</p>
+  <div class="panel chart-holder">
+    <div class="scroller"><svg id="lineChart" class="chart" role="img" aria-label="Cumulative cost per month, months 0 to 36, for five Verizon options"></svg></div>
+    <div class="legend" id="lineLegend"></div>
+    <div class="tipbox" id="lineTip"></div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead">
+    <div>
+      <p class="eyebrow">The part nobody prices</p>
+      <h2>What it costs to walk away</h2>
+    </div>
+  </div>
+  <p class="sub">Promo credits arrive monthly for 36 months and stop the day you leave, downgrade the plan, or pay the phone off early. Leave mid-contract and you settle the device balance <em>and</em> forfeit every credit you hadn't received yet. Only the option with no device contract lets you walk.</p>
+  <div class="panel chart-holder">
+    <div class="field" style="max-width:330px; margin-bottom:6px">
+      <label for="exitMonth">Leave after <span class="mono" id="exitMonthLabel">18</span> months</label>
+      <input id="exitMonth" type="range" min="1" max="35" step="1" value="18" style="padding:0; border:0; background:transparent">
+    </div>
+    <div class="scroller"><svg id="exitChart" class="chart" role="img" aria-label="Cost of leaving early: device balance owed plus promotional credits forfeited"></svg></div>
+    <div class="legend" id="exitLegend"></div>
+    <div class="tipbox" id="exitTip"></div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead">
+    <div>
+      <p class="eyebrow">Every number on one screen</p>
+      <h2>The table</h2>
+    </div>
+  </div>
+  <div class="panel" style="padding:4px 0 0">
+    <div class="scroller"><table id="tbl"><thead></thead><tbody></tbody></table></div>
+  </div>
+</section>
+
+<section>
+  <div class="sechead">
+    <div>
+      <p class="eyebrow">Pick by behaviour, not by discount</p>
+      <h2>Which one is yours</h2>
+    </div>
+  </div>
+  <div class="guide" id="guide"></div>
+  <div class="callout" id="perkNote"></div>
+</section>
+
+<div class="notes">
+  <h3>Data, and how much to trust it</h3>
+  <ul>
+    <li><span class="conf c">CERTAIN</span>iPhone 18 Pro starts at $1,199 and 18 Pro Max at $1,299, 256 GB, announced 9 Sept 2026, on sale 18 Sept. The standard iPhone 18 was <em>not</em> in the fall line-up — it arrives spring 2027 with the iPhone Air 2 and 18e.</li>
+    <li><span class="conf c">CERTAIN</span>Verizon's headline offers: up to <b>$1,200</b> off when you add a line on an eligible myPlan, up to <b>$1,020</b> off when you upgrade an existing line. Paid as equal bill credits across a 36-month 0% device payment plan. Trade-in must be a tier-one Apple, Samsung, Google or Motorola device, active on the account 60+ days.</li>
+    <li><span class="conf c">CERTAIN</span>Simplicity Pro bundles the iPhone 18 Pro and unlimited service at <b>$80/mo</b> ($30 plan + $50 device) after Auto Pay and switcher credits, plus tax. Unlimited 5G Ultra Wideband, 10 GB hotspot, Canada/Mexico roaming. Swap for the newest iPhone after 12 months or once 33% is paid off — the handset goes back in good working order.</li>
+    <li><span class="conf c">CERTAIN</span>The line must stay on myPlan for the full 36 months. Change plan and the remaining promotional value is gone.</li>
+    <li><span class="conf l">LIKELY</span>myPlan with Auto Pay: Unlimited Welcome $65 / Plus $80 / Ultimate $90 for one line; $30 / $45 / $55 per line at four lines. Two- and three-line rates are interpolated between those published endpoints — confirm yours in the cart.</li>
+    <li><span class="conf g">GUESSING</span>The Welcome-tier credit ($830 default here) and the higher-storage prices. All three tiers are trade-in eligible, but Verizon reserves the top credit for Ultimate — the exact Welcome figure moves week to week. Override it in the controls with the number your cart shows.</li>
+    <li><span class="conf l">LIKELY</span>Visible is Verizon-owned and runs on Verizon's network at $25/mo with taxes and fees included. It is a different product: no store support, no perks, and base-tier data is deprioritised when a tower is busy.</li>
+  </ul>
+  <p style="margin-top:18px; font-size:12.5px; color:var(--ink-3)">
+    Sources: <a href="https://www.verizon.com/about/news/iphone-18-pro-max-verizon-offers">Verizon newsroom</a> ·
+    <a href="https://www.phonearena.com/news/verizon-unveils-five-iphone-18-offers-before-pre-orders-worth-up-to-1200-off_id183276">PhoneArena</a> ·
+    <a href="https://www.techradar.com/phones/iphone/verizon-launches-iphone-18-pro-preorders-with-two-ways-to-save-get-a-device-included-plus-an-apple-watch-and-ipad">TechRadar</a> ·
+    <a href="https://www.apple.com/newsroom/2026/09/apple-debuts-iphone-18-pro-and-iphone-18-pro-max/">Apple Newsroom</a> ·
+    <a href="https://www.verizon.com/plans/unlimited/myplan/">myPlan</a>.
+    Carrier promotions change weekly and vary by ZIP code and account history — treat this as a model to check a real cart against, not a quote.
+  </p>
+</div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ── plan data ─────────────────────────────────────── */
+  var PLANS = {
+    welcome:  { name:"Unlimited Welcome",  perLine:[65,55,40,30,30] },
+    plus:     { name:"Unlimited Plus",     perLine:[80,70,55,45,45] },
+    ultimate: { name:"Unlimited Ultimate", perLine:[90,80,70,55,55] }
+  };
+  var TERM = 36;          // Verizon device payment plan length
+  var VISIBLE = 25;       // taxes and fees included
+  var SIMPL_PLAN = 30, SIMPL_DEVICE = 50;
+
+  var SCEN = [
+    { id:"ultimate",  short:"Ultimate",     name:"myPlan Unlimited Ultimate", sub:"top credit, top price",
+      color:"--s1", plan:"ultimate", credit:"top",  owns:true,  newEvery:36 },
+    { id:"plus",      short:"Plus",         name:"myPlan Unlimited Plus",     sub:"same credit, $10 less",
+      color:"--s2", plan:"plus",     credit:"top",  owns:true,  newEvery:36 },
+    { id:"welcome",   short:"Welcome",      name:"myPlan Unlimited Welcome",  sub:"smaller credit, cheapest plan",
+      color:"--s3", plan:"welcome",  credit:"low",  owns:true,  newEvery:36 },
+    { id:"simplicity",short:"Simplicity",   name:"Simplicity Pro",            sub:"$80 all-in, new iPhone yearly",
+      color:"--s4", plan:null,       credit:null,   owns:false, newEvery:12 },
+    { id:"visible",   short:"Visible",      name:"Buy outright + Visible",    sub:"Verizon network, no contract",
+      color:"--s5", plan:null,       credit:null,   owns:true,  newEvery:36 }
+  ];
+
+  /* ── helpers ───────────────────────────────────────── */
+  var $ = function(id){ return document.getElementById(id); };
+  function money(n){ return "$" + Math.round(n).toLocaleString("en-US"); }
+  function money2(n){ return "$" + n.toFixed(2); }
+  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;"); }
+
+  function cfg(){
+    var lines = parseInt($("lines").value,10);
+    return {
+      price:   Math.max(0, parseFloat($("price").value)   || 0),
+      lines:   lines,
+      credTop: Math.max(0, parseFloat($("credit").value)  || 0),
+      credLow: Math.max(0, parseFloat($("creditW").value) || 0),
+      tax:     Math.max(0, parseFloat($("tax").value)     || 0),
+      resale:  Math.max(0, parseFloat($("resale").value)  || 0),
+      idx:     lines - 1,
+      switcher: $("custSwitch").getAttribute("aria-pressed") === "true"
+    };
+  }
+
+  /* One line's economics. Plan price already reflects the multi-line rate. */
+  function model(s, c){
+    var o = { id:s.id, short:s.short, name:s.name, sub:s.sub, color:s.color,
+              owns:s.owns, newEvery:s.newEvery, upfront:0, planMo:0, deviceMo:0, creditMo:0 };
+
+    if (s.id === "visible") {
+      o.upfront = c.price;
+      o.planMo  = VISIBLE;
+      o.planLabel = "Visible unlimited";
+    } else if (s.id === "simplicity") {
+      o.planMo   = SIMPL_PLAN + c.tax;
+      o.deviceMo = SIMPL_DEVICE;
+      o.planLabel = "Simplicity Pro";
+    } else {
+      o.planMo   = PLANS[s.plan].perLine[c.idx] + c.tax;
+      o.deviceMo = c.price / TERM;
+      o.creditMo = Math.min(c.price, s.credit === "top" ? c.credTop : c.credLow) / TERM;
+      o.planLabel = PLANS[s.plan].name;
+    }
+    o.netDeviceMo = Math.max(0, o.deviceMo - o.creditMo);
+    o.monthly     = o.planMo + o.netDeviceMo;
+
+    o.service36 = o.planMo * TERM;
+    o.device36  = o.upfront + o.netDeviceMo * TERM;
+    o.cash36    = o.service36 + o.device36;
+    o.residual  = s.owns ? c.resale : 0;
+    o.net36     = o.cash36 - o.residual;
+    o.phones    = Math.round(TERM / s.newEvery);
+    return o;
+  }
+
+  function cumulative(o, m){
+    return o.upfront + o.planMo * m + o.netDeviceMo * Math.min(m, TERM);
+  }
+
+  function exitCost(o, m){
+    var left = Math.max(0, TERM - m);
+    if (o.id === "visible")    return { owed:0, forfeit:0 };
+    // Simplicity Pro is still a 36-month device payment plan: leave outside an
+    // upgrade window and the remaining handset balance comes due.
+    if (o.id === "simplicity") return { owed: SIMPL_DEVICE * left, forfeit:0 };
+    return { owed: o.deviceMo * left, forfeit: o.creditMo * left };
+  }
+
+  /* ── SVG utilities ─────────────────────────────────── */
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs){
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) if (attrs[k] !== null && attrs[k] !== undefined) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function txt(x, y, s, attrs){
+    var n = el("text", attrs || {});
+    n.setAttribute("x", x); n.setAttribute("y", y);
+    n.textContent = s;
+    return n;
+  }
+  function clear(node){ while (node.firstChild) node.removeChild(node.firstChild); }
+
+  function tip(box, host, x, y, html){
+    box.innerHTML = html;
+    var hr = host.getBoundingClientRect();
+    box.style.left = (x - hr.left) + "px";
+    box.style.top  = (y - hr.top - 12) + "px";
+    box.style.opacity = "1";
+  }
+  function hideTip(box){ box.style.opacity = "0"; }
+
+  /* ── render: findings ──────────────────────────────── */
+  function renderFindings(rows, c){
+    var byId = {}; rows.forEach(function(r){ byId[r.id] = r; });
+    var best = rows.slice().sort(function(a,b){ return a.net36 - b.net36; })[0];
+    var tierGap = byId.ultimate.net36 - byId.welcome.net36;
+    var simplVsUlt = byId.ultimate.net36 - byId.simplicity.net36;
+    var vsBest = byId.ultimate.net36 - best.net36;
+
+    var items = [
+      { big: money(Math.abs(tierGap)),
+        t: tierGap > 0 ? "Ultimate costs more than Welcome" : "Ultimate now wins on credit",
+        d: tierGap > 0
+           ? "Over 36 months, on " + c.lines + (c.lines>1?" lines":" line") + ", the top tier's extra $" +
+             Math.round((PLANS.ultimate.perLine[c.idx]-PLANS.welcome.perLine[c.idx])) +
+             "/mo outruns its bigger trade-in credit."
+           : "At these credit values the bigger promo finally beats the plan surcharge. Rare — double-check both numbers." },
+      { big: money(Math.abs(simplVsUlt)),
+        t: simplVsUlt > 0 ? "Simplicity Pro undercuts Ultimate" : "Ultimate undercuts Simplicity Pro",
+        d: simplVsUlt > 0
+           ? "And it hands you a brand-new Pro every 12 months instead of one phone for three years. You never own any of them."
+           : "Ultimate's credit is large enough here that owning the phone beats leasing it yearly." },
+      { big: money(vsBest),
+        t: "Gap between the loudest deal and the best one",
+        d: "The \"$" + Math.round(c.credTop) + " off\" headline lands on " + byId.ultimate.name +
+           ". The cheapest route here is " + best.name + "." }
+    ];
+
+    var box = $("findings"); clear(box); box.innerHTML = "";
+    items.forEach(function(it){
+      var d = document.createElement("div");
+      d.className = "finding";
+      d.innerHTML = '<span class="big">' + it.big + '</span>' +
+                    '<span class="t">' + esc(it.t) + '</span>' +
+                    '<span class="d">' + esc(it.d) + '</span>';
+      box.appendChild(d);
+    });
+  }
+
+  /* ── render: rank cards ────────────────────────────── */
+  function renderRanks(rows){
+    var sorted = rows.slice().sort(function(a,b){ return a.net36 - b.net36; });
+    var host = $("ranks"); host.innerHTML = "";
+    sorted.forEach(function(r, i){
+      var d = document.createElement("div");
+      d.className = "rank" + (i === 0 ? " win" : "");
+      d.style.setProperty("--c", "var(" + r.color + ")");
+      var tags = '<span class="tag ' + (r.owns ? "ok" : "no") + '">' + (r.owns ? "you own it" : "lease · return it") + '</span>' +
+                 '<span class="tag">' + (r.newEvery === 12 ? "new phone yearly" : "one phone / 3 yrs") + '</span>';
+      d.innerHTML =
+        '<span class="pos">' + (i === 0 ? "Cheapest" : "#" + (i + 1)) + '</span>' +
+        '<span class="nm">' + esc(r.name) + '</span>' +
+        '<span class="amt" style="color:var(' + r.color + ')">' + money(r.net36) + '</span>' +
+        '<span class="per">' + money2(r.monthly) + '/mo' + (r.upfront ? ' + ' + money(r.upfront) + ' up front' : '') + '</span>' +
+        '<span class="tags">' + tags + '</span>';
+      host.appendChild(d);
+    });
+  }
+
+  /* ── render: bar chart (service vs handset) ────────── */
+  function renderBars(rows){
+    var svg = $("barChart"), host = svg.parentNode.parentNode, box = $("barTip");
+    var sorted = rows.slice().sort(function(a,b){ return a.cash36 - b.cash36; });
+    var padL = 152, padR = 92, padT = 30, padB = 34;
+    var rowH = 46, gap = 12;
+    var w = Math.max(640, host.clientWidth - 40);
+    var h = padT + sorted.length * rowH + (sorted.length - 1) * gap + padB;
+    var plotW = w - padL - padR;
+    var max = Math.max.apply(null, sorted.map(function(r){ return r.cash36; })) * 1.02;
+
+    clear(svg);
+    svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+    svg.setAttribute("width", w); svg.setAttribute("height", h);
+
+    var defs = el("defs");
+    sorted.forEach(function(r, i){
+      var p = el("pattern", { id:"hatch-" + r.id, width:6, height:6, patternUnits:"userSpaceOnUse", patternTransform:"rotate(45)" });
+      p.appendChild(el("rect", { width:6, height:6, fill:"var(--surface)" }));
+      p.appendChild(el("rect", { width:2.6, height:6, fill:"var(" + r.color + ")" }));
+      defs.appendChild(p);
+    });
+    svg.appendChild(defs);
+
+    // ticks
+    var step = max > 4000 ? 1000 : 500;
+    for (var v = 0; v <= max; v += step){
+      var x = padL + (v / max) * plotW;
+      svg.appendChild(el("line", { x1:x, y1:padT - 8, x2:x, y2:h - padB + 2, class:"grid" }));
+      svg.appendChild(txt(x, h - padB + 20, "$" + (v/1000).toFixed(v % 1000 === 0 ? 0 : 1) + "k",
+        { "font-size":11, "text-anchor":"middle", "fill":"var(--ink-3)" }));
+    }
+    svg.appendChild(el("line", { x1:padL, y1:padT - 8, x2:padL, y2:h - padB + 2, class:"axis-line", stroke:"var(--line-strong)" }));
+
+    sorted.forEach(function(r, i){
+      var y = padT + i * (rowH + gap);
+      var svcW = (r.service36 / max) * plotW;
+      var devW = (r.device36  / max) * plotW;
+      var barH = 26, yb = y + (rowH - barH) / 2;
+
+      svg.appendChild(txt(padL - 14, yb + barH / 2 + 4, r.short,
+        { "font-size":12.5, "text-anchor":"end", "fill":"var(--ink)", "font-weight":500 }));
+      svg.appendChild(txt(padL - 14, yb + barH / 2 + 19, r.planLabel.length > 20 ? r.planLabel.slice(0,19) + "…" : r.planLabel,
+        { "font-size":10, "text-anchor":"end", "fill":"var(--ink-3)" }));
+
+      // service segment — rounded at the data end only when nothing follows
+      var g = el("g", { style:"cursor:default" });
+      g.appendChild(el("rect", { x:padL, y:yb, width:Math.max(0, svcW), height:barH,
+        rx:4, fill:"var(" + r.color + ")" }));
+      // square off the joining edge with a small overlay so only the outer end is rounded
+      if (devW > 0.5) g.appendChild(el("rect", { x:Math.max(padL, padL + svcW - 4), y:yb, width:4, height:barH, fill:"var(" + r.color + ")" }));
+      if (devW > 0.5){
+        g.appendChild(el("rect", { x:padL + svcW + 2, y:yb, width:Math.max(0, devW - 2), height:barH,
+          rx:4, fill:"url(#hatch-" + r.id + ")", stroke:"var(" + r.color + ")", "stroke-width":1 }));
+      }
+      var total = r.cash36;
+      g.appendChild(txt(padL + svcW + devW + 12, yb + barH / 2 + 4, money(total),
+        { "font-size":13, "fill":"var(--ink)", "font-weight":500 }));
+
+      g.addEventListener("mousemove", function(ev){
+        tip(box, host, ev.clientX, ev.clientY,
+          "<b>" + esc(r.name) + "</b><br>Service 36 mo &nbsp;" + money(r.service36) +
+          "<br>Handset 36 mo &nbsp;" + money(r.device36) +
+          "<br>Total cash &nbsp;" + money(total) +
+          (r.residual ? "<br>Resale back &nbsp;−" + money(r.residual) : "<br>Nothing to resell"));
+      });
+      g.addEventListener("mouseleave", function(){ hideTip(box); });
+      svg.appendChild(g);
+    });
+
+    $("barLegend").innerHTML =
+      '<span><i style="background:var(--ink-2)"></i>Solid — service (plan + taxes)</span>' +
+      '<span><i style="background:repeating-linear-gradient(45deg,var(--ink-2) 0 2px,transparent 2px 5px); border:1px solid var(--line-strong)"></i>Hatched — handset after credits</span>';
+  }
+
+  /* ── render: cumulative line chart ─────────────────── */
+  function renderLines(rows){
+    var svg = $("lineChart"), host = svg.parentNode.parentNode, box = $("lineTip");
+    var padL = 58, padR = 152, padT = 22, padB = 40;
+    var w = Math.max(700, host.clientWidth - 40), h = 360;
+    var plotW = w - padL - padR, plotH = h - padT - padB;
+    var max = 0;
+    rows.forEach(function(r){ max = Math.max(max, cumulative(r, TERM)); });
+    max = Math.ceil(max / 500) * 500;
+
+    clear(svg);
+    svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+    svg.setAttribute("width", w); svg.setAttribute("height", h);
+
+    var X = function(m){ return padL + (m / TERM) * plotW; };
+    var Y = function(v){ return padT + plotH - (v / max) * plotH; };
+
+    for (var v = 0; v <= max; v += 1000){
+      svg.appendChild(el("line", { x1:padL, y1:Y(v), x2:padL + plotW, y2:Y(v), class:"grid" }));
+      svg.appendChild(txt(padL - 10, Y(v) + 4, "$" + (v/1000) + "k",
+        { "font-size":11, "text-anchor":"end", "fill":"var(--ink-3)" }));
+    }
+    [0,6,12,18,24,30,36].forEach(function(m){
+      svg.appendChild(txt(X(m), h - padB + 22, m === 0 ? "0" : "mo " + m,
+        { "font-size":11, "text-anchor":"middle", "fill":"var(--ink-3)" }));
+    });
+    svg.appendChild(el("line", { x1:padL, y1:padT, x2:padL, y2:padT + plotH, class:"axis-line", stroke:"var(--line-strong)" }));
+    svg.appendChild(el("line", { x1:padL, y1:padT + plotH, x2:padL + plotW, y2:padT + plotH, class:"axis-line", stroke:"var(--line-strong)" }));
+
+    var ends = [];
+    rows.forEach(function(r){
+      var d = "";
+      for (var m = 0; m <= TERM; m++) d += (m ? "L" : "M") + X(m).toFixed(1) + " " + Y(cumulative(r, m)).toFixed(1) + " ";
+      svg.appendChild(el("path", { d:d, fill:"none", stroke:"var(" + r.color + ")", "stroke-width":2,
+        "stroke-linejoin":"round", "stroke-linecap":"round" }));
+      ends.push({ r:r, y:Y(cumulative(r, TERM)), v:cumulative(r, TERM) });
+    });
+
+    // de-collide the direct labels
+    ends.sort(function(a,b){ return a.y - b.y; });
+    for (var i = 1; i < ends.length; i++) if (ends[i].y - ends[i-1].y < 15) ends[i].y = ends[i-1].y + 15;
+    ends.forEach(function(e){
+      svg.appendChild(el("circle", { cx:X(TERM), cy:Y(e.v), r:4, fill:"var(" + e.r.color + ")",
+        stroke:"var(--surface)", "stroke-width":2 }));
+      svg.appendChild(txt(X(TERM) + 10, e.y + 4, e.r.short + " " + money(e.v),
+        { "font-size":11.5, "fill":"var(--ink)" }));
+    });
+
+    // crosshair
+    var cross = el("line", { y1:padT, y2:padT + plotH, stroke:"var(--line-strong)", "stroke-width":1, opacity:0 });
+    svg.appendChild(cross);
+    var dots = el("g", { opacity:0 });
+    rows.forEach(function(r){ dots.appendChild(el("circle", { r:4.5, fill:"var(" + r.color + ")", stroke:"var(--surface)", "stroke-width":2 })); });
+    svg.appendChild(dots);
+
+    var hit = el("rect", { x:padL, y:padT, width:plotW, height:plotH, fill:"transparent" });
+    hit.addEventListener("mousemove", function(ev){
+      var pt = svg.getBoundingClientRect();
+      var mx = (ev.clientX - pt.left) * (w / pt.width);
+      var m = Math.round(Math.max(0, Math.min(TERM, ((mx - padL) / plotW) * TERM)));
+      cross.setAttribute("x1", X(m)); cross.setAttribute("x2", X(m)); cross.setAttribute("opacity", 1);
+      dots.setAttribute("opacity", 1);
+      var list = rows.map(function(r){ return { r:r, v:cumulative(r, m) }; }).sort(function(a,b){ return a.v - b.v; });
+      Array.prototype.forEach.call(dots.childNodes, function(node, i){
+        node.setAttribute("cx", X(m)); node.setAttribute("cy", Y(cumulative(rows[i], m)));
+      });
+      var html = "<b>Month " + m + "</b>";
+      list.forEach(function(o){ html += "<br>" + o.r.short + " &nbsp;" + money(o.v); });
+      tip(box, host, ev.clientX, ev.clientY, html);
+    });
+    hit.addEventListener("mouseleave", function(){
+      hideTip(box); cross.setAttribute("opacity", 0); dots.setAttribute("opacity", 0);
+    });
+    svg.appendChild(hit);
+
+    $("lineLegend").innerHTML = rows.map(function(r){
+      return '<span><i style="background:var(' + r.color + ')"></i>' + esc(r.short) + '</span>';
+    }).join("");
+  }
+
+  /* ── render: exit cost ─────────────────────────────── */
+  function renderExit(rows, m){
+    var svg = $("exitChart"), host = svg.parentNode.parentNode, box = $("exitTip");
+    var data = rows.map(function(r){
+      var e = exitCost(r, m);
+      return { r:r, owed:e.owed, forfeit:e.forfeit, total:e.owed + e.forfeit };
+    });
+    var max = Math.max(1, Math.max.apply(null, data.map(function(d){ return d.total; }))) * 1.08;
+
+    var padL = 40, padR = 24, padT = 26, padB = 56;
+    var w = Math.max(620, host.clientWidth - 40), h = 300;
+    var plotW = w - padL - padR, plotH = h - padT - padB;
+    var slot = plotW / data.length, barW = Math.min(76, slot - 22);
+
+    clear(svg);
+    svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+    svg.setAttribute("width", w); svg.setAttribute("height", h);
+
+    var defs = el("defs");
+    data.forEach(function(d){
+      var p = el("pattern", { id:"xh-" + d.r.id, width:6, height:6, patternUnits:"userSpaceOnUse", patternTransform:"rotate(45)" });
+      p.appendChild(el("rect", { width:6, height:6, fill:"var(--surface)" }));
+      p.appendChild(el("rect", { width:2.6, height:6, fill:"var(" + d.r.color + ")" }));
+      defs.appendChild(p);
+    });
+    svg.appendChild(defs);
+
+    svg.appendChild(el("line", { x1:padL, y1:padT + plotH, x2:padL + plotW, y2:padT + plotH, class:"axis-line", stroke:"var(--line-strong)" }));
+
+    data.forEach(function(d, i){
+      var cx = padL + slot * i + slot / 2;
+      var x = cx - barW / 2;
+      var base = padT + plotH;
+      var hOwed = (d.owed / max) * plotH;
+      var hForf = (d.forfeit / max) * plotH;
+
+      var g = el("g");
+      if (d.total < 1){
+        g.appendChild(txt(cx, base - 12, "free to leave",
+          { "font-size":11.5, "text-anchor":"middle", "fill":"var(--good)" }));
+        g.appendChild(el("line", { x1:x, y1:base - 3, x2:x + barW, y2:base - 3, stroke:"var(--good)", "stroke-width":3, "stroke-linecap":"round" }));
+      } else {
+        g.appendChild(el("rect", { x:x, y:base - hOwed, width:barW, height:hOwed, rx:4, fill:"var(" + d.r.color + ")" }));
+        if (hOwed > 4) g.appendChild(el("rect", { x:x, y:base - 4, width:barW, height:4, fill:"var(" + d.r.color + ")" }));
+        if (hForf > 1){
+          g.appendChild(el("rect", { x:x, y:base - hOwed - hForf - 2, width:barW, height:Math.max(0, hForf - 2), rx:4,
+            fill:"url(#xh-" + d.r.id + ")", stroke:"var(" + d.r.color + ")", "stroke-width":1 }));
+        }
+        g.appendChild(txt(cx, base - hOwed - hForf - 12, money(d.total),
+          { "font-size":13, "text-anchor":"middle", "fill":"var(--ink)", "font-weight":500 }));
+      }
+      g.appendChild(txt(cx, base + 20, d.r.short, { "font-size":12, "text-anchor":"middle", "fill":"var(--ink)" }));
+      g.appendChild(txt(cx, base + 35, d.r.id === "simplicity" ? "return or pay off" : (d.r.owns ? "keeps phone" : "returns phone"),
+        { "font-size":10, "text-anchor":"middle", "fill":"var(--ink-3)" }));
+
+      g.addEventListener("mousemove", function(ev){
+        tip(box, host, ev.clientX, ev.clientY,
+          "<b>" + esc(d.r.name) + "</b><br>Leaving at month " + m +
+          "<br>Device balance &nbsp;" + money(d.owed) +
+          "<br>Credits forfeited &nbsp;" + money(d.forfeit) +
+          "<br>Cost to exit &nbsp;" + money(d.total));
+      });
+      g.addEventListener("mouseleave", function(){ hideTip(box); });
+      svg.appendChild(g);
+    });
+
+    $("exitLegend").innerHTML =
+      '<span><i style="background:var(--ink-2)"></i>Solid — device balance you must settle</span>' +
+      '<span><i style="background:repeating-linear-gradient(45deg,var(--ink-2) 0 2px,transparent 2px 5px); border:1px solid var(--line-strong)"></i>Hatched — promo credits you never receive</span>';
+  }
+
+  /* ── render: table ─────────────────────────────────── */
+  function renderTable(rows, c){
+    var cols = ["Option","Plan","Plan/mo","Handset/mo","All-in/mo","Up front","36-mo cash","Own it?","New phone","Net of resale"];
+    var thead = $("tbl").querySelector("thead"), tbody = $("tbl").querySelector("tbody");
+    thead.innerHTML = "<tr>" + cols.map(function(x){ return "<th>" + x + "</th>"; }).join("") + "</tr>";
+    var sorted = rows.slice().sort(function(a,b){ return a.net36 - b.net36; });
+    tbody.innerHTML = sorted.map(function(r){
+      return "<tr>" +
+        '<td><span class="swatch" style="background:var(' + r.color + ')"></span>' + esc(r.name) + "</td>" +
+        "<td>" + esc(r.planLabel) + "</td>" +
+        "<td>" + money2(r.planMo) + "</td>" +
+        "<td>" + money2(r.netDeviceMo) + "</td>" +
+        "<td>" + money2(r.monthly) + "</td>" +
+        "<td>" + (r.upfront ? money(r.upfront) : "—") + "</td>" +
+        "<td>" + money(r.cash36) + "</td>" +
+        "<td>" + (r.owns ? "yes" : "no") + "</td>" +
+        "<td>" + (r.newEvery === 12 ? "every 12 mo" : "every 36 mo") + "</td>" +
+        '<td style="font-weight:500">' + money(r.net36) + "</td>" +
+      "</tr>";
+    }).join("");
+  }
+
+  /* ── render: decision guide ────────────────────────── */
+  function renderGuide(rows, c){
+    var byId = {}; rows.forEach(function(r){ byId[r.id] = r; });
+    var cheapest = rows.slice().sort(function(a,b){ return a.net36 - b.net36; })[0];
+
+    var cards = [
+      { who:"You want the newest Pro every year",
+        pick:"Simplicity Pro",
+        why:"$" + Math.round(byId.simplicity.monthly) + "/mo covers phone and service, and you swap at month 12. Three Pros over three years for " +
+             money(byId.simplicity.cash36) + " — roughly " + money(byId.simplicity.cash36 / 3) +
+             " a year. Switchers only, and you own nothing at the end." },
+      { who:"You keep phones until they die",
+        pick:"Welcome + trade-in",
+        why:"The cheapest postpaid route with real Verizon service: " + money2(byId.welcome.monthly) +
+             "/mo and the handset is yours at month 36. You give up the perks and the premium-data ceiling of the higher tiers." },
+      { who:"You only care about the total",
+        pick:"Outright + Visible",
+        why:"Same Verizon towers, " + money(byId.visible.net36) + " over three years net of resale, taxes included, no 36-month lock. The trade-offs are real: no store support, no perks, and your data yields to postpaid traffic when a tower is congested." },
+      { who:"You actually use the perks",
+        pick:"Plus or Ultimate",
+        why:"Ultimate only earns its " + money((PLANS.ultimate.perLine[c.idx] - PLANS.welcome.perLine[c.idx]) * 36) +
+             " premium if you'd otherwise pay for the streaming, hotspot and international data it bundles. Count the subscriptions you'd cancel before you sign." }
+    ];
+
+    $("guide").innerHTML = cards.map(function(g){
+      return '<div class="gcard"><span class="who">' + esc(g.who) + '</span>' +
+             '<span class="pick">' + esc(g.pick) + '</span>' +
+             '<span class="why">' + esc(g.why) + '</span></div>';
+    }).join("");
+
+    var perkBreak = 10;
+    $("perkNote").innerHTML =
+      "<b>On perks:</b> a $10/mo perk is only a saving if you were already paying for that subscription. " +
+      "Three perks add $30/mo — " + money(30 * 36) + " over the contract — and Ultimate's own premium over Welcome is " +
+      money((PLANS.ultimate.perLine[c.idx] - PLANS.welcome.perLine[c.idx]) * 36) + " on top. " +
+      "The break-even is simple: cancel at least " + perkBreak + " dollars of real subscriptions per perk, or the perk is a price increase wearing a discount's clothes." +
+      (cheapest.id === "visible" ? " Right now the model says the cheapest path skips Verizon retail entirely." : "");
+  }
+
+  /* ── main ──────────────────────────────────────────── */
+  function render(){
+    var c = cfg();
+    var rows = SCEN.map(function(s){ return model(s, c); });
+    renderFindings(rows, c);
+    renderRanks(rows);
+    renderBars(rows);
+    renderLines(rows);
+    renderExit(rows, parseInt($("exitMonth").value, 10));
+    renderTable(rows, c);
+    renderGuide(rows, c);
+  }
+
+  /* ── wiring ────────────────────────────────────────── */
+  ["price","lines","credit","creditW","tax","resale"].forEach(function(id){
+    $(id).addEventListener("input", render);
+    $(id).addEventListener("change", render);
+  });
+  $("model").addEventListener("change", function(){ $("price").value = this.value; render(); });
+  $("exitMonth").addEventListener("input", function(){
+    $("exitMonthLabel").textContent = this.value;
+    var c = cfg();
+    renderExit(SCEN.map(function(s){ return model(s, c); }), parseInt(this.value, 10));
+  });
+
+  function setCustomer(isSwitcher){
+    $("custSwitch").setAttribute("aria-pressed", isSwitcher ? "true" : "false");
+    $("custUp").setAttribute("aria-pressed", isSwitcher ? "false" : "true");
+    $("credit").value  = isSwitcher ? 1200 : 1020;
+    $("creditW").value = isSwitcher ? 830  : 730;
+    render();
+  }
+  $("custSwitch").addEventListener("click", function(){ setCustomer(true); });
+  $("custUp").addEventListener("click", function(){ setCustomer(false); });
+
+  $("themeToggle").addEventListener("click", function(){
+    var root = document.documentElement;
+    var now = root.getAttribute("data-theme");
+    var dark = now ? now === "dark"
+                   : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    root.setAttribute("data-theme", dark ? "light" : "dark");
+    render();
+  });
+
+  var t;
+  window.addEventListener("resize", function(){ clearTimeout(t); t = setTimeout(render, 140); });
+
+  render();
+})();
+</script>
+</body>
+</html>
