@@ -6,131 +6,96 @@ relis `BRIEF.md`, ce journal et `QUESTIONS.md`, puis je continue.
 
 ## Où on en est
 
-**Étape 0 : questions de départ** (11 octobre 2026).
+**Étape 1 : exploration, en cours** (11 octobre 2026, soir).
 
 ```
-Projet   [█░░░░░░░░░░░░░░░░░░░]  ~5 %   étape 0 sur 5 arrêts
-Arrêt 1  [░░░░░░░░░░░░░░░░░░░░]  bloqué : accès réseau + études manquantes
+Projet   [██░░░░░░░░░░░░░░░░░░]  ~10 %
+Arrêt 1  [██████████████░░░░░░]  ~70 %   inventaire de la boutique en cours
 ```
 
-- Brief enregistré tel quel : `BRIEF.md`.
-- Questions pour toi et pour Nathalie : `QUESTIONS.md`.
-- Ce que Nathalie doit fournir pour les contenus pilotes :
-  `a-fournir/contenus-pilotes.md`.
-- Formule du prix livré relevée dans le plan, à titre provisoire :
-  `notes/formule-provisoire-plan.md`.
-- Recherche des prix actuels faite : `notes/recherche-technique-couts.md`.
-  **Fiabilité limitée** : l'outil de lecture des pages web était en panne ce
-  jour-là ; les chiffres viennent des extraits du moteur de recherche. À
-  relire sur les pages officielles avant l'arrêt 1.
+- L'accès réseau est ouvert depuis le 11/10 : le site, son API WordPress et
+  la boutique répondent.
+- Inventaire WordPress fait : `arret-1/inventaire.md` et les tableaux dans
+  `inventaire/`.
+- Inventaire de la boutique (185 pièces) : lecture lente en cours, avec
+  `outils/boutique_inventaire.py`. Si la conversation s'arrête, relancer :
+  `python3 -I outils/boutique_inventaire.py inventaire/brut`, puis
+  `python3 -I outils/inventaire_boutique.py inventaire/brut inventaire` et
+  `python3 -I outils/redirections.py inventaire arret-1/redirections-brouillon.csv`.
+- Faits : plan du site et menu (`arret-1/plan-du-site.md`), ce qui disparaît
+  et les exports à faire soi-même (`arret-1/ce-qui-disparait.md`), brouillon
+  du choix technique et des coûts (`arret-1/technique-et-couts.md`).
+- Fait sans attendre : le calcul des prix pour les États-Unis
+  (`site/src/lib/prix.ts`, 14 tests), le fichier unique de réglages
+  (`site/src/donnees/reglages-prix.yaml`) et celui des engagements
+  (`site/src/donnees/engagements.yaml`).
+- En cours : étude des sites de référence dans un vrai navigateur
+  (`notes/references/`), revérification des prix des services sur les
+  pages officielles (`notes/recherche-technique-couts.md`).
 
-### Deux blocages constatés le 11 octobre
-
-1. **L'environnement de travail ne peut pas joindre nathalierives.com.** La
-   politique réseau de cet environnement le refuse (comme les sites de
-   référence et les registres publics). Seuls les outils de développement
-   (npm) et Google Fonts passent. Tant que ce n'est pas ouvert, je ne peux
-   ni faire l'inventaire, ni revérifier l'API WordPress, ni récupérer les
-   images. → question T1.
-2. **Le dossier `etudes/` n'existe pas** dans le dépôt, et les quatre
-   études ne sont pas dans le Google Drive relié. → question T2.
+### Toujours bloqué
+- **Les quatre études** (`etudes/`) n'ont pas été fournies (T2). La formule
+  du prix livré suit le plan, à titre provisoire. Rien de ce qui en dépend
+  ne s'affiche tant que les forfaits ne sont pas « confirmés ».
 
 ## Ce qui est décidé, et pourquoi
 
+- **11/10 — Calcul des prix : règles du brief codées et testées.** Pas de
+  dollars sans règle de TVA, taux de change et validation de Nathalie ;
+  jamais de conversion du TTC ; droits toujours chiffrés ou « sur demande » ;
+  pas de total livré tant qu'un forfait n'est pas « confirmé ». Pourquoi
+  maintenant : ça ne dépend d'aucune réponse, et c'est la partie la plus
+  risquée.
+- **11/10 — Référence des pièces : le numéro de la boutique actuelle**
+  (ex. 1095), faute de référence saisie (aucune fiche n'en a). Il sert aussi
+  aux redirections. À confirmer avec Nathalie si elle a son propre registre.
+- **11/10 — Domaine : le DNS reste chez Gandi** (option A proposée).
+  Pourquoi : Gandi sait rediriger l'adresse sans « www » en HTTPS. Le jour de
+  la bascule, on ne change que les deux réglages du site, pas ceux des
+  emails. À valider à l'arrêt 1.
 - **11/10 — Le projet vit dans le dossier `nathalierives/`** de ce dépôt,
   sur la branche `claude/nathalierives-redesign-syc71o`. Pourquoi : le dépôt
-  contient déjà un autre projet (l'application Settle). Le site devra
-  ensuite déménager dans un dépôt à lui, appartenant au studio, avant
-  l'aperçu (arrêt 3) : l'interface d'édition et l'hébergeur s'y brancheront,
-  et la personne du studio ne doit pas avoir accès à un autre projet. Ce
-  sera dans la liste des comptes de l'arrêt 1.
-- **11/10 — La charte graphique Settle ne s'applique pas ici.** Le fichier
-  `CLAUDE.md` à la racine du dépôt impose des couleurs et des polices
-  (bleu nuit, ambre, Sora) faites pour Settle. Le site de Nathalie Rives
-  suit son brief à elle. J'ai ajouté une ligne dans ce `CLAUDE.md` pour le
-  dire, et pour que « reprends » mène ici.
-- **11/10 — Technique pressentie : un site statique fait avec Astro**,
-  comme tu le préfères (un site statique = des pages fabriquées à l'avance,
-  servies telles quelles, sans serveur à entretenir). Pas d'autre voie
-  meilleure à mes yeux. Les vrais choix sont ailleurs et seront tranchés à
-  l'arrêt 1 : l'interface d'édition, l'endroit où vivent les photos, et le
-  service qui envoie les emails des formulaires (il faut une petite
-  fonction côté serveur pour ça).
+  contient déjà un autre projet (l'application Settle). Le site déménagera
+  dans un dépôt à lui, au nom du studio, avant l'aperçu (arrêt 3).
+- **11/10 — La charte graphique Settle ne s'applique pas ici.** Le
+  `CLAUDE.md` racine vise Settle ; une ligne y renvoie vers ce projet.
+- **11/10 — Technique : un site statique fait avec Astro**, hébergé chez
+  Cloudflare, édité avec Sveltia CMS, emails par Brevo (détails et options
+  dans `arret-1/technique-et-couts.md`, à valider à l'arrêt 1).
 - **11/10 — Formule du prix livré** : l'étude 3 fera foi. En attendant,
-  j'ai relevé celle du calculateur du plan, sans en reprendre ce que le
-  brief écarte (Shopify, « droits compris »).
-
-### Ce que dit la recherche des prix (provisoire, à revérifier)
-
-- Une combinaison à **0 € par mois** semble possible : hébergement
-  Cloudflare (offre gratuite, usage commercial a priori permis), interface
-  d'édition Sveltia CMS (gratuite, bilingue, réduit les photos à l'envoi,
-  encore en version bêta), emails par Brevo (gratuit jusqu'à 300 par jour,
-  données en Europe), mesure d'audience Cloudflare Web Analytics (gratuite,
-  sans cookie ; régler l'option qui exclut par défaut les visiteurs
-  européens). Option confort : environ 5 $ par mois.
-- Vercel (offre gratuite) et GitHub Pages interdisent l'usage commercial :
-  écartés.
-- La personne du studio aurait besoin d'un **compte GitHub gratuit** avec
-  Sveltia. Repli sans compte GitHub : Pages CMS, moins complet.
-- Police : une police libre ne coûte rien ; la licence web de Brandon chez
-  son créateur (HVD) se fait sur devis ; Adobe Fonts enverrait l'adresse des
-  visiteurs à Adobe.
-- Hors technique (fourchettes) : relecture de l'anglais par un Américain
-  150 à 400 $ (correction) ou 500 à 1 400 $ (adaptation) ; avocat pour les
-  conditions de vente 600 à 1 300 € HT, 2 500 à 5 000 € HT avec CGU et
-  confidentialité ; photographe à Lyon 450 à 1 200 € la journée.
-- **Conflit avec le brief à trancher à l'arrêt 1** : pour que l'email de
-  confirmation parte d'une adresse du studio vers n'importe quel visiteur,
-  il faut ajouter deux ou trois lignes dans les réglages du domaine (DNS,
-  l'annuaire qui dit où vont le site et les emails). Ces ajouts ne coupent
-  pas les emails existants s'ils sont faits correctement, mais le brief dit
-  de ne changer que le réglage du site. Même chose pour servir l'adresse sans
-  « www ». Je proposerai les options à l'arrêt 1. D'ici la bascule, rien ne
-  change : tous les emails vont à ton adresse.
-- Le registre du domaine n'a pas pu être lu. Le site actuel crédite un
-  prestataire web extérieur : c'est probablement lui qui a les accès (T5).
+  celle du calculateur du plan, sans ce que le brief écarte (Shopify,
+  « droits compris »).
 
 ## Ce que j'attends de toi
 
-Voir `QUESTIONS.md`, rubrique « Pour toi ». En priorité : **T1** (accès
-réseau) et **T2** (les études). Puis T6, T7 pour l'arrêt 1.
+Voir `QUESTIONS.md`. Toujours en attente : **T2** (les études), puis T3 à
+T13. **T5 a une réponse partielle** : le domaine et les emails sont chez
+Gandi, le site chez OVH ; il reste à savoir qui a l'accès au compte Gandi.
 
 ## Questions pour Nathalie
 
-Voir `QUESTIONS.md`, rubrique « Pour Nathalie », et
-`a-fournir/contenus-pilotes.md`.
+Voir `QUESTIONS.md` (N1 à N5), `a-fournir/contenus-pilotes.md`, et les
+regroupements de projets dans `arret-1/inventaire.md`.
 
 ## Ce qui reste à faire
 
-### Possible sans attendre
-- [x] Enregistrer le brief, ouvrir le journal, poser les questions.
-- [x] Liste exacte des contenus pilotes.
-- [x] Prix des services (recherche faite, à revérifier sur les pages
-      officielles quand l'accès réseau sera ouvert).
-- [ ] Modèle des fiches (pièce chinée, édition, projet, parution) avec tous
-      les champs du brief.
-- [ ] Fichier de réglages (taux de change, droits par type, forfaits
-      « estimation » datés) et fichier des engagements (tout « à confirmer »).
-- [ ] Calcul du prix livré, avec des tests, en suivant la formule provisoire.
-- [ ] Plan du site et menu, en français et en anglais.
-
-### Dès que l'accès réseau est ouvert (T1)
-- [ ] Revérifier l'API WordPress et les pages de catégories de la boutique.
-- [ ] Inventaire : pièces, projets, presse, PDF, images (meilleure
-      résolution), crédits des photographes.
-- [ ] Liste des designers nommés, tableau des titres, pièces à
-      rephotographier, regroupements de projets.
-- [ ] Table de redirection des anciennes adresses.
-- [ ] Sites de référence, dans un vrai navigateur.
-- [ ] Registre public du domaine.
-
 ### Arrêt 1
-- [ ] Inventaire, ce qui disparaît, plan du site et menu, choix technique,
-      tableau des coûts, comptes à ouvrir et dans quel ordre.
+- [x] Revérifier l'API WordPress et partir des pages de catégories.
+- [x] Inventaire WordPress : projets, presse, PDF, pages, crédits.
+- [ ] Inventaire de la boutique : pièces, designers nommés, titres à
+      vérifier, pièces à rephotographier, types douaniers et tailles proposés.
+- [ ] Table de redirection (brouillon) avec les pièces.
+- [x] Registre public du domaine.
+- [x] Plan du site et menu ; ce qui disparaît ; exports.
+- [ ] Sites de référence (en cours) ; prix revérifiés (en cours).
+- [ ] Compte rendu de l'arrêt 1.
+
+### Plus tard
+- [ ] Modèle des fiches dans l'interface d'édition (arrêt 3).
 
 ## Historique
 
+- **11/10/2026, soir** — Accès réseau ouvert. Inventaire WordPress, registre
+  du domaine, plan du site, ce qui disparaît, calcul des prix et réglages.
 - **11/10/2026** — Démarrage. Brief enregistré. Constat des deux blocages.
-  Questions posées. Recherche des prix faite (fiabilité limitée, voir plus
-  haut).
+  Questions posées. Recherche des prix faite (fiabilité limitée).

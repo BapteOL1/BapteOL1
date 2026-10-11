@@ -188,3 +188,21 @@ site, qui pourra être résilié** un mois après la bascule : c'est une
 | Relecture juridique (conditions de vente, mentions légales, confidentialité) | 600 à 1 300 € HT pour les conditions de vente ; 2 500 à 5 000 € HT pour les trois | brouillons fournis à partir des textes actuels de la boutique |
 | Licence web de la police Brandon | sur devis (HVD Fonts) ; 0 € avec une police libre | à décider à l'arrêt 2 |
 | Photos à refaire | 450 à 1 200 € par journée de photographe à Lyon | [Estimation] environ 30 à 40 pièces par jour avec le guide photo ; à commencer par les 30 plus chères (liste dans l'inventaire). Ou bien l'équipe, avec le guide, pour 0 € |
+
+## Ce qui dépend du nom de domaine (premier relevé, à compléter avant la bascule)
+
+Relevé dans les registres publics le 11 octobre 2026 :
+
+| Élément | Valeur actuelle | Touché par la bascule ? |
+|---|---|---|
+| Bureau d'enregistrement | **Gandi SAS**, depuis le 12/06/2012 ; renouvellement avant le **12/06/2027** ; transfert verrouillé | non |
+| Serveurs DNS | Gandi (`ns-224-a`, `ns-230-c`, `ns-239-b.gandi.net`) | non (option A) |
+| Site (`www` et adresse nue) | `51.91.236.193` : un serveur OVH, Apache, PHP 7.0 ; l'adresse nue redirige vers `www` | **oui : seuls ces deux réglages changent** |
+| Emails (MX) | Gandi Mail (`spool.mail.gandi.net`, `fb.mail.gandi.net`) | non |
+| Anti-usurpation (SPF) | `v=spf1 include:_mailcust.gandi.net ?all` | non ; on y **ajoute** Brevo si tu l'acceptes |
+| DKIM, DMARC | aucun trouvé | Brevo en demandera (ajouts) |
+| Adresses connues | contact@nathalierives.com ; presse confiée à une agence extérieure | non |
+
+À faire à l'arrêt 5 avec la personne qui a l'accès Gandi : exporter la
+liste complète des réglages DNS (Gandi le permet en un clic) et la garder
+avec la copie de l'ancien site.
