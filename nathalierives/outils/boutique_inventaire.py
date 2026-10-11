@@ -22,7 +22,9 @@ ROOT = "https://www.nathalierives.com/galerie/"
 UA = "Mozilla/5.0 (inventaire refonte nathalierives.com; lecture seule)"
 PAUSE_PAGE = 2.5
 PAUSE_IMAGE = 1.5
-INTERDIT = re.compile(r"panier|commande|mon-compte|wishlist|comparaison|add=|token=", re.I)
+# Pages du panier, du compte, etc. (et jamais d'action « ajouter »). Une
+# fiche produit (« …/760-panier-rotin.html ») n'est pas concernée.
+INTERDIT = re.compile(r"/galerie/(?:panier|commande|mon-compte|module/|comparaison|authentification|adresse)|[?&](?:add|token)=", re.I)
 PRODUIT = re.compile(r"/galerie/[^?#]*?/(\d+)-[^/?#]+\.html$")
 
 
@@ -156,8 +158,13 @@ def main(dest):
             e["categories"].append(c["nom"])
     (dest / "boutique_categories.json").write_text(json.dumps(cats, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"{len(pieces)} pièces distinctes", flush=True)
+    sortie = dest / "boutique_pieces.json"
+    deja = {f["url"]: f for f in json.load(open(sortie, encoding="utf-8"))} if sortie.exists() else {}
     resultat = []
     for i, (url, p) in enumerate(sorted(pieces.items()), 1):
+        if url in deja:  # reprise après interruption
+            resultat.append(deja[url])
+            continue
         f = fiche(s, url)
         f.update({k: p[k] for k in ("titre_liste", "prix_liste", "etiquettes_liste", "categories")})
         f["images"] = [dims_image(s, chemin_original(i_)) for i_ in f.get("images_ids", [])]

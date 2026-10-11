@@ -40,7 +40,12 @@ NOMS = ["André Sornay", "Audoux & Minet", "Audoux-Minet", "Audoux Minet", "Mais
         "Sornay", "Ligne Roset", "Roche Bobois", "Cassina", "Artemide", "Flos", "Kartell",
         "Vitra", "Eames", "Saarinen", "Bertoia", "Hans Wegner", "Wegner", "Arne Jacobsen",
         "Finn Juhl", "Kai Kristiansen", "Poul Henningsen", "Louis Poulsen", "Le Klint",
-        "Ingo Maurer", "Hervé Baley", "Philippe Starck", "Mathieu Lustrerie", "Lustrerie Mathieu"]
+        "Ingo Maurer", "Hervé Baley", "Philippe Starck", "Mathieu Lustrerie", "Lustrerie Mathieu",
+        "Géraldine Zuchowicz", "Les Enfants du Design", "Ezan", "Pol Chambost", "Elchinger",
+        "Ziegler Schaffhausen", "Ziegler", "Zimmer + Rohde", "Zimmer & Rohde", "Zimmer Rohde", "Santos",
+        "Hervé Lelong", "Olivier Cajan", "Dedar", "Barois", "Les Reflets", "Nathalie Rives"]
+# Maisons de tissus : citées pour la garniture, pas comme auteur de la pièce.
+TISSUS = {"Pierre Frey", "Frey", "Zimmer + Rohde", "Zimmer & Rohde", "Zimmer Rohde", "Dedar"}
 NOMS_PAR_LONGUEUR = sorted(set(NOMS), key=len, reverse=True)
 
 PERIODE = re.compile(r"(années\s*(?:19)?\d0(?:\s*[-/à]\s*(?:19)?\d0)?|XVIII[eè]?m?e?|XIX[eè]?m?e?|XX[eè]?m?e?\s*siècle|"
@@ -53,7 +58,7 @@ ORIGINE = re.compile(r"\b(France|français[e]?|italien(?:ne)?s?|Italie|danois[e]
                      r"anglais[e]?|Angleterre|espagnol[e]?|Espagne|allemand[e]?|Allemagne|belge|Belgique|"
                      r"portugais[e]?|marocain[e]?|Maroc|chinois[e]?|Chine|japonais[e]?|Japon|indien(?:ne)?|"
                      r"Inde|brésilien(?:ne)?|américain[e]?|Lyon|Vallauris|Valauris|Paris)\b", re.I)
-HORS_UE = re.compile(r"\b(anglais[e]?|Angleterre|marocain[e]?|Maroc|chinois[e]?|Chine|japonais[e]?|Japon|indien(?:ne)?|"
+HORS_UE = re.compile(r"\b(Schaffhausen|anglais[e]?|Angleterre|marocain[e]?|Maroc|chinois[e]?|Chine|japonais[e]?|Japon|indien(?:ne)?|"
                      r"Inde|brésilien(?:ne)?|américain[e]?|suisse)\b", re.I)
 BOIS = re.compile(r"\b(bois|chêne|noyer|teck|palissandre|hêtre|acajou|merisier|frêne|orme|pin|sapin|bambou|"
                   r"rotin|érable|ébène|wengé|wenge|olivier|loupe|placage|plaqué)\b", re.I)
@@ -186,6 +191,24 @@ GENERIQUES = {"lampe de table", "lampe", "applique murale", "paire d'appliques",
               "applique", "vase capri", "service en céramique", "céramique italienne"}
 
 
+def titre_propose(titre, t, noms):
+    """Proposition tirée du texte de la fiche seulement (jamais des photos)."""
+    phrase = re.split(r"(?<=[a-zé0-9)»\"])\.\s+|\s+Dimensions?\s*:|\s+Prix livraison|\s+Matières?\s*:", t.strip(), maxsplit=1)[0].strip(" .")
+    mot = (titre.split() or [""])[0].lower()
+    if phrase and mot and phrase.lower().startswith(mot[:5]) and len(phrase) <= 90 and phrase.lower() != titre.lower():
+        prop = phrase[0].upper() + phrase[1:]
+    else:
+        m = re.search(r"Mati[eè]res?\s*:\s*([^.;]+?)(?:\s+Dimensions|\s+Prix|\.|;|$)", t)
+        prop = f"{titre} en {m.group(1).strip()}" if m and m.group(1).strip().lower() not in titre.lower() else titre
+    auteurs = [n for n in noms if n not in TISSUS and n != "Nathalie Rives" and n.lower() not in prop.lower()]
+    if auteurs:
+        prop += f", {auteurs[0]}"
+    per = PERIODE.search(t)
+    if per and per.group(0).lower() not in prop.lower():
+        prop += f", {per.group(0)}"
+    return prop if prop != titre else ""
+
+
 def main(brut, sortie):
     brut, sortie = Path(brut), Path(sortie)
     data = json.load(open(brut / "boutique_pieces.json", encoding="utf-8"))
@@ -223,13 +246,13 @@ def main(brut, sortie):
             a_verifier = []
             if compte_titres[titre.lower()] > 1:
                 a_verifier.append(f"titre partagé par {compte_titres[titre.lower()]} pièces")
-            if not PERIODE.search(t):
+            if fam != "édition ou artiste" and not PERIODE.search(t):
                 a_verifier.append("époque")
-            if not noms:
+            if fam != "édition ou artiste" and not noms:
                 a_verifier.append("designer ou fabricant")
             if not re.search(r"mati[eè]re|en (?:bois|métal|laiton|verre|céramique|rotin|bambou|chêne|noyer|corde|faïence|laine)", t, re.I):
                 a_verifier.append("matières")
-            titres.append({"id_boutique": p["id"], "titre_actuel": titre, "titre_propose": "",
+            titres.append({"id_boutique": p["id"], "titre_actuel": titre, "titre_propose": titre_propose(titre, t, noms),
                            "ce_que_dit_la_description": t[:220], "a_verifier": ", ".join(a_verifier)})
         for n in noms:
             designers[n].append((p["id"], titre, niveau(titre + " " + t, n)))
@@ -246,7 +269,9 @@ def main(brut, sortie):
     ecrire(sortie / "a_rephotographier.csv", [r for r in photos if r["manque"]])
     ecrire(sortie / "designers_nommes.csv", [
         {"nom_tel_qu_ecrit": n, "nb_pieces": len(v), "pieces": " | ".join(f"{i} {t}" for i, t, _ in v),
-         "niveau_lu_dans_le_texte": ", ".join(sorted({lv for _, _, lv in v}))}
+         "niveau_lu_dans_le_texte": ", ".join(sorted({lv for _, _, lv in v})),
+         "remarque": "maison de tissus (garniture), pas l'auteur de la pièce" if n in TISSUS else
+                     ("ses éditions" if n == "Nathalie Rives" else "")}
         for n, v in sorted(designers.items(), key=lambda kv: -len(kv[1]))])
     ok = [r for r in pieces if "famille" in r]
     res = {"pieces": len(data), "pages_ok": len(ok), "par_famille": Counter(r["famille"] for r in ok),
