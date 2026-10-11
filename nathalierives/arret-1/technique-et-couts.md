@@ -1,8 +1,9 @@
 # Choix technique, comptes et coûts
 
 > Les prix viennent de `notes/recherche-technique-couts.md`, relus sur les
-> pages officielles le 11 octobre 2026 quand c'est indiqué. Ils changent :
-> revérifier avant d'ouvrir un compte payant.
+> pages officielles le 11 octobre 2026 (131 chiffres vérifiés, 33 corrigés
+> par rapport à la première recherche). Ils changent : revérifier avant
+> d'ouvrir un compte payant. Les prix ne précisent pas toujours la TVA.
 
 ## En une phrase
 
@@ -65,8 +66,13 @@ bascule, les deux arrivent à ton adresse, et nulle part ailleurs.**
   s'arrêterait et **la version en ligne resterait celle d'avant** ;
 - toute modification est gardée dans l'historique et peut être annulée.
 
+*Une limite honnête :* sur un dépôt privé gratuit, GitHub ne permet pas de
+verrouiller le dépôt lui-même. Une personne invitée pourrait donc, en
+allant volontairement sur github.com, modifier un fichier à la main. Dans
+l'interface d'édition, en revanche, elle ne peut rien casser.
+
 **Le compte qu'il lui faut :** un compte GitHub gratuit, ouvert avec son
-email professionnel, invité sur le dépôt du site. GitHub est le service qui
+email professionnel, invité sur le dépôt du site avec le droit d'écrire. GitHub est le service qui
 range les fichiers du site et garde leur historique. *Si ce compte pose
 problème, l'alternative est Pages CMS, avec une invitation par email. Mais
 elle ne gère pas nativement les deux langues, ne réduit pas les photos et
@@ -94,16 +100,21 @@ interdisent un site commercial.
 | Decap CMS | 0 € | GitHub, ou Decap Turbo (bêta) | oui | oui, sauf HEIC | Plus ancien, moins pratique sur téléphone |
 
 [Probable] Sveltia est encore en version « bêta » (la 1.0 est annoncée pour
-fin 2026), mais une version sort chaque semaine. Le risque est faible : le
+fin 2026), mais une version sort chaque semaine (0.234.0 le 11/10/2026). Le
+français et l'anglais s'éditent côte à côte (vérifié). Le risque est faible : le
 contenu reste dans de simples fichiers, et Decap lit les mêmes réglages. On
 pourrait donc changer d'interface sans rien perdre.
 
 ### 3. Les emails des formulaires
 
-**Brevo, offre gratuite** : 300 emails par jour, données en Europe. Pour que
-la confirmation au visiteur parte d'une adresse du studio sans finir en
-indésirable, il faudra **ajouter deux ou trois lignes dans les réglages du
-domaine chez Gandi**. Ce sont des ajouts : rien n'est remplacé, les emails
+**Brevo, offre gratuite** : 300 emails par jour, données en Europe, usage
+professionnel prévu par ses conditions. Brevo valide le compte avant le
+premier envoi. Les emails de l'offre gratuite portent la mention « Sent with
+Brevo » [à vérifier sur un envoi de test pour les emails de confirmation].
+La retirer coûte 15 € par mois (offre Standard). Pour que la confirmation
+au visiteur parte d'une adresse du studio sans finir en indésirable, il
+faudra **ajouter trois ou quatre lignes dans les réglages du domaine chez
+Gandi**. Ce sont des ajouts : rien n'est remplacé, les emails
 du studio ne sont pas touchés. Ce n'est pas le réglage du site : **j'ai
 besoin de ton accord**. Sans ces lignes, Brevo envoie quand même, mais
 depuis une adresse à lui, et les emails arrivent moins bien.
@@ -123,22 +134,34 @@ quel outil exactement ?** (T11)
 ### 5. La police
 
 Une police libre, hébergée avec le site (0 €, aucune donnée envoyée à un
-tiers), montrée à côté de Brandon à l'arrêt 2. Garder Brandon reste
-possible : licence web sur devis chez son créateur, HVD Fonts. Adobe Fonts
-la propose aussi, mais avec un abonnement payant, et en envoyant l'adresse
-des visiteurs à Adobe.
+tiers), montrée à côté de Brandon à l'arrêt 2.
+
+**Garder Brandon est bon marché** : chez son créateur, HVD Fonts, la licence
+web coûte **35 € par style, en achat unique**, jusqu'à 20 000 pages vues
+par mois (220 € la famille complète). Il en faudrait 2 à 4 styles, soit
+70 à 140 €. À comparer à Adobe Fonts : abonnement à 11,99 € TTC par mois au
+minimum, au nom du studio, qui envoie l'adresse des visiteurs à Adobe. Sur
+MyFonts, la licence est à durée limitée. **Ma recommandation : la licence
+HVD**, si l'arrêt 2 montre que Brandon, bien utilisée, sert mieux son
+identité que la police libre.
 
 ### Le reste, sans choix à faire
 
 - **Mesure d'audience** : Cloudflare Web Analytics, gratuit, sans cookie.
   Visites par langue (adresses en `/en/` ou non) ; demandes envoyées =
-  visites des pages « merci ». À régler : l'option qui, par défaut, ne compte
-  pas les visiteurs européens.
+  visites des pages « merci » (l'outil ne compte pas encore d'autres
+  événements). À régler : choisir « Enable Globally », sinon les visiteurs
+  européens ne sont pas comptés.
 - **Recherche** : Pagefind, un moteur de recherche fabriqué avec le site,
   gratuit, sans service extérieur.
 - **Aperçu privé (arrêt 3)** : une adresse Cloudflare protégée par Cloudflare
   Access (gratuit jusqu'à 50 personnes, code reçu par email) et interdite
-  aux moteurs de recherche.
+  aux moteurs de recherche. Cloudflare demande une carte bancaire pour
+  activer Access, même gratuit.
+- **Paiement en ligne** : rien n'est construit, seulement un champ « lien
+  de paiement » par pièce. Les conditions gratuites de Cloudflare interdisent
+  de collecter soi-même des numéros de carte : un lien vers un service de
+  paiement extérieur reste permis.
 - **Photos** : les photos du site sont rangées avec lui, en WebP de 2 400 px
   au plus (qualité 88). Le site fabrique les tailles plus petites. Les
   originaux restent au studio : Drive ou disque.
@@ -153,8 +176,8 @@ ouvres** ; je te donnerai les gestes un par un au moment voulu.
 | # | Service | À quoi il sert | Prêt pour | Coût | Propriétaire |
 |---|---|---|---|---|---|
 | 1 | **GitHub** (une « organisation » au nom du studio) | ranger le site et son historique ; se connecter à l'interface d'édition | **avant l'arrêt 3** | 0 € | le studio |
-| 2 | **Cloudflare** | héberger l'aperçu puis le site, protéger l'aperçu, mesurer l'audience | **avant l'arrêt 3** | 0 € (une carte bancaire peut être demandée pour la protection de l'aperçu : à vérifier) | le studio |
-| 3 | **Brevo** | envoyer les emails des formulaires, puis la newsletter | **avant l'arrêt 3** (pour tester l'envoi réel) | 0 € | le studio |
+| 2 | **Cloudflare** | héberger l'aperçu puis le site, protéger l'aperçu, mesurer l'audience | **avant l'arrêt 3** | 0 € (carte bancaire demandée pour activer la protection de l'aperçu, sans débit) | le studio |
+| 3 | **Brevo** | envoyer les emails des formulaires, puis la newsletter | **avant l'arrêt 3** (pour tester l'envoi réel ; Brevo valide le compte avant le premier envoi) | 0 € | le studio |
 | 4 | Un compte GitHub par personne qui édite | se connecter à l'interface | **avant l'essai de l'arrêt 3** | 0 € | chaque personne |
 | 5 | Accès au compte **Gandi** (déjà existant) | les deux réglages de la bascule | **arrêt 5** | déjà payé | à identifier (T5) |
 
@@ -165,15 +188,16 @@ ouvres** ; je te donnerai les gestes un par un au moment voulu.
 | Service | À quoi il sert | Prix / mois | Ce que l'offre gratuite permet (usage commercial compris) | Comment on en sort |
 |---|---|---|---|---|
 | Cloudflare Pages | héberger le site, les formulaires | **0 €** | 500 mises en ligne par mois, trafic illimité, 100 000 envois de formulaire par jour, 20 000 fichiers ; usage commercial : aucune interdiction trouvée | le site est un dossier de fichiers : on le dépose ailleurs (Netlify…) en une heure |
-| Cloudflare Access | protéger l'aperçu | **0 €** | jusqu'à 50 personnes | on l'éteint |
+| Cloudflare Access | protéger l'aperçu | **0 €** | jusqu'à 50 personnes ; carte bancaire demandée à l'activation ; 7 $ par personne au-delà | on l'éteint |
 | Cloudflare Web Analytics | compter les visites sans cookie | **0 €** | sans limite connue | on retire une ligne du site |
 | GitHub | ranger le site, se connecter | **0 €** | dépôts privés illimités, 2 000 minutes de fabrication par mois | on télécharge le dépôt, il contient tout |
 | Sveltia CMS | interface d'édition | **0 €** | logiciel libre | on le remplace par Decap, qui lit les mêmes réglages |
-| Brevo | emails des formulaires et newsletter | **0 €** | 300 emails par jour ; logo Brevo dans les emails (à vérifier) | export des contacts en CSV |
+| Brevo | emails des formulaires et newsletter | **0 €** | 300 emails par jour ; mention « Sent with Brevo » dans les emails ; usage professionnel prévu | export des contacts en CSV |
 | Pagefind | recherche | **0 €** | logiciel libre | — |
 | **Total technique** | | **0 €** | | |
 | *Options* | Cloudflare Workers Paid si l'on dépasse les limites | *5 $* | | |
-| | Brevo Starter si la newsletter dépasse 300 envois par jour | *environ 9 $* | | |
+| | Brevo Starter si la newsletter dépasse 300 envois par jour | *7 €* | | |
+| | Brevo Standard pour retirer « Sent with Brevo » | *15 €* | | |
 
 **Hors de ce total, déjà payés aujourd'hui :** le nom de domaine et les
 boîtes email chez Gandi, qui restent. Et **l'hébergement OVH de l'ancien
@@ -184,9 +208,9 @@ site, qui pourra être résilié** un mois après la bascule : c'est une
 
 | Dépense | Fourchette | Commentaire |
 |---|---|---|
-| Relecture des textes anglais par un rédacteur américain | 150 à 400 $ (correction) ; 500 à 1 400 $ (adaptation) | 5 000 à 10 000 mots selon le nombre de fiches traduites au lancement |
+| Relecture des textes anglais par un rédacteur américain | 100 à 300 $ (correction finale, 2 à 3 cents le mot) ; 150 à 400 $ (révision, 3 à 4 cents) ; 500 à 1 400 $ (adaptation) | 5 000 à 10 000 mots selon le nombre de fiches traduites au lancement |
 | Relecture juridique (conditions de vente, mentions légales, confidentialité) | 600 à 1 300 € HT pour les conditions de vente ; 2 500 à 5 000 € HT pour les trois | brouillons fournis à partir des textes actuels de la boutique |
-| Licence web de la police Brandon | sur devis (HVD Fonts) ; 0 € avec une police libre | à décider à l'arrêt 2 |
+| Licence web de la police Brandon | **70 à 140 €**, en achat unique (HVD Fonts, 35 € par style, 2 à 4 styles) ; 0 € avec une police libre | à décider à l'arrêt 2 |
 | Photos à refaire | 450 à 1 200 € par journée de photographe à Lyon | [Estimation] environ 30 à 40 pièces par jour avec le guide photo ; à commencer par les 30 plus chères (liste dans l'inventaire). Ou bien l'équipe, avec le guide, pour 0 € |
 
 ## Ce qui dépend du nom de domaine (premier relevé, à compléter avant la bascule)
