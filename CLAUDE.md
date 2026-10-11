@@ -26,3 +26,7 @@ Always apply this design system when generating any code for Settle:
 ## Reference files
 Always read CLAUDE.md and `01-Brand/settle-brand-tokens.js` before writing any code.
 Always read settle-brand-kit.html for component patterns before generating UI code.
+
+## Other project in this repo: Nathalie Rives (`nathalierives/`)
+The Settle design system above applies to Settle only, never to `nathalierives/`.
+When the user writes « reprends », read `nathalierives/CLAUDE.md`, then `nathalierives/BRIEF.md`, `nathalierives/JOURNAL.md` and `nathalierives/QUESTIONS.md`, and continue from the journal.
