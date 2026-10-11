@@ -1,0 +1,59 @@
+{
+ "pieces": 185,
+ "pages_ok": 185,
+ "par_famille": {
+  "art de la table": 26,
+  "art": 14,
+  "meuble": 20,
+  "édition ou artiste": 23,
+  "assise": 16,
+  "divers": 15,
+  "céramique": 19,
+  "tapisserie": 13,
+  "luminaire": 35,
+  "bougeoir": 2,
+  "miroir": 1,
+  "coussin": 1
+ },
+ "avec_reference": 0,
+ "avec_dimensions": 171,
+ "avec_periode": 62,
+ "avec_etat": 3,
+ "avec_cablage": 4,
+ "photos_total": 528,
+ "photos_par_piece": {
+  "1": 49,
+  "3": 43,
+  "4": 30,
+  "5": 15,
+  "2": 37,
+  "7": 3,
+  "6": 5,
+  "8": 2,
+  "14": 1
+ },
+ "pieces_avec_une_photo_de_2000px": 13,
+ "type_douanier_propose": {
+  "(vide : vaisselle : pas de taux vérifié)": 26,
+  "(vide : œuvre d'art : pas de taux vérifié)": 14,
+  "meuble (10 %)": 20,
+  "(vide : œuvre ou édition : type à préciser)": 21,
+  "tapisserie (10 %)": 15,
+  "siège rembourré, structure bois (15 %)": 4,
+  "(vide : pas de taux vérifié)": 17,
+  "(vide : structure ou garniture non précisée : question à Nathalie)": 10,
+  "céramique décorative (10 %)": 18,
+  "luminaire (10 %)": 35,
+  "(vide : fabriquée hors UE d'après le texte : pas de taux vérifié)": 1,
+  "(vide : miroir : pas de taux vérifié)": 1,
+  "siège rembourré, structure métal ou teck (10 %)": 2,
+  "(vide : coussin : pas de taux vérifié)": 1
+ },
+ "taille_envoi": {
+  "(vide)": 14,
+  "moyenne": 51,
+  "grande": 16,
+  "petite": 104
+ },
+ "valeur_affichee_ttc": 166399.0
+}

@@ -1,0 +1,39 @@
+{
+ "pages": 342,
+ "articles": 404,
+ "medias": 3815,
+ "medias_par_type": {
+  "image/png": 1176,
+  "image/jpeg": 2427,
+  "application/pdf": 212
+ },
+ "projets_par_rubrique": {
+  "(sans rubrique)": 5,
+  "Commerces et bureaux": 13,
+  "Graphisme": 9,
+  "Hôtels et restaurants": 36,
+  "Résidentiel": 9,
+  "Scénographie": 6
+ },
+ "regroupements": {
+  "Suites MiHotel (Lyon)": 4,
+  "Galerie Nathalie Rives": 3,
+  "Métropole Aidante": 2,
+  "Café San Telmo": 3,
+  "L'Œuf à la Coq": 2,
+  "Les Terrasses de Saint-Bonnet": 3,
+  "Château La Gallée": 8,
+  "Hôtel L'Ambassador, Zermatt": 4,
+  "La Maison de Répit": 2,
+  "La Tour Rose": 13
+ },
+ "presse_lignes_uniques": 222,
+ "presse_avec_date_lisible": 65,
+ "presse_par_type": {
+  "PDF": 156,
+  "image": 11,
+  "page web": 44,
+  "vidéo": 11
+ },
+ "pdf": 212
+}

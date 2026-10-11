@@ -1,0 +1,127 @@
+# Réglages des prix pour les États-Unis
+# ------------------------------------
+# LE SEUL fichier d'où se calculent les prix en dollars, les droits de douane
+# et la livraison à New York. Il se modifie dans l'interface d'édition
+# (rubrique « Réglages »). Ne rien calculer ailleurs.
+#
+# Règles du brief, appliquées par src/lib/prix.ts :
+# - aucun prix en dollars tant que la règle de TVA n'est pas connue et que
+#   Nathalie n'a pas validé, pièce par pièce, le prix export, le type
+#   douanier et la taille d'envoi ;
+# - les droits s'affichent toujours en chiffres (estimation), calculés sur le
+#   prix de la pièce seule ; un type sans taux vérifié affiche « sur demande » ;
+# - pas de total livré tant que le forfait de la taille n'est pas « confirmé ».
+
+taux_de_change:
+  # 1 euro = combien de dollars. Vide = aucun prix en dollars n'est affiché.
+  eur_vers_usd: null
+  date: null
+  source: ""
+
+regle_tva:
+  # « à confirmer » tant que Nathalie (et son comptable) n'ont pas tranché.
+  # Valeurs possibles : marge, normale, mixte. Le prix export n'est JAMAIS
+  # calculé à partir du prix TTC : il est saisi sur chaque fiche.
+  statut: à confirmer
+
+arrondi_usd:
+  # À confirmer avec Nathalie : arrondir les prix en dollars (1 = au dollar).
+  pas: 1
+  statut: à confirmer
+
+droits_de_douane:
+  verifies_le: 2026-10-10
+  # Taux pour des pièces fabriquées dans l'Union européenne. Pour toute autre
+  # origine, aucun taux n'est appliqué (« sur demande »).
+  origine_couverte: Union européenne
+  types:
+    luminaire:
+      fr: Luminaire
+      en: Lighting
+      taux: 0.10
+    meuble:
+      fr: Meuble
+      en: Furniture
+      taux: 0.10
+    ceramique_decorative:
+      fr: Céramique décorative
+      en: Decorative ceramics
+      taux: 0.10
+    tapisserie:
+      fr: Tapisserie
+      en: Tapestry
+      taux: 0.10
+    siege_rembourre_bois:
+      fr: Siège rembourré à structure bois
+      en: Upholstered seating, wood frame
+      taux: 0.15
+    siege_rembourre_metal_teck:
+      fr: Siège rembourré à structure métal ou teck
+      en: Upholstered seating, metal or teak frame
+      taux: 0.10
+    antiquite:
+      fr: Antiquité de plus de 100 ans (preuve écrite exigée)
+      en: Antique over 100 years old (written proof required)
+      taux: 0.00
+      preuve_exigee: true
+  # Tout le reste (œuvres d'art, vaisselle, verre, miroirs, tapis, coussins,
+  # pièces fabriquées hors UE) : pas de taux vérifié → « sur demande ».
+
+forfaits_new_york:
+  # Ce qui dépend du volume : emballage ou caisse + transport + livraison à
+  # la porte, en dollars. Un total livré ne s'affiche que si « confirmé ».
+  # Valeurs actuelles : estimations du plan pour New York (10/10/2026), en
+  # attendant l'étude 3 et de vrais devis.
+  petite:
+    montant_usd: 510
+    detail: express 420 + emballage 90
+    statut: estimation
+    date: 2026-10-10
+  moyenne:
+    montant_usd: 2020
+    detail: bateau groupé 1 150 + caisse 420 + livraison 450
+    statut: estimation
+    date: 2026-10-10
+  grande:
+    montant_usd: 3990
+    detail: bateau groupé 2 500 + caisse 840 + livraison 650
+    statut: estimation
+    date: 2026-10-10
+
+frais_selon_le_prix:
+  # Assurance, frais de douane et de courtier : dépendent du prix de la pièce
+  # et changent au-dessus du seuil. PROVISOIRE : lignes relevées dans le
+  # calculateur du plan, à remplacer par celles de l'étude 3.
+  source: plan pour New York (provisoire, en attendant etudes/3-douane-livraison.md)
+  seuil_usd: 2500
+  assurance:
+    taux: 0.01
+    minimum_eur: 12
+  jusqu_au_seuil:
+    - nom: Frais de traitement douanier (entrée simplifiée)
+      code: mpf
+      forfait_usd: 2.77
+    - nom: Frais d'avance des droits par le transporteur
+      base: droits_plus_mpf
+      taux: 0.02
+      minimum_eur: 17
+  au_dessus_du_seuil:
+    - nom: Frais de traitement douanier (entrée formelle)
+      code: mpf
+      base: valeur
+      taux: 0.003464
+      minimum_usd: 34.58
+      maximum_usd: 670.86
+    - nom: Frais d'avance des droits par le transporteur
+      base: droits_plus_mpf
+      taux: 0.02
+      minimum_eur: 17
+    - nom: Caution douanière
+      base: valeur_plus_droits
+      taux: 0.005
+      minimum_usd: 40
+    - nom: Dossier du courtier
+      forfait_usd: 35
+    - nom: Déclaration Lacey (meubles en bois)
+      forfait_usd: 35
+      si: bois
