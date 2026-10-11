@@ -1,0 +1,79 @@
+# Ce que le site promet
+# --------------------
+# LE SEUL endroit où vivent les engagements de la galerie. Chaque valeur reste
+# « à confirmer » tant que Nathalie ne l'a pas validée ; le site affiche alors
+# la formule « sans_chiffre », jamais un chiffre inventé. Quand elle valide,
+# on remplit « valeur » (fr / en) et on passe le statut à « confirmé ».
+# Les formules anglaises sont à relire par le rédacteur américain.
+
+delai_de_reponse:
+  statut: à confirmer
+  valeur: null
+  sans_chiffre:
+    fr: Nous vous répondons personnellement, en français ou en anglais.
+    en: You'll hear back from us personally, in English or French.
+
+reservation:
+  statut: à confirmer
+  valeur: null    # durée, conditions (acompte ?), ce qui se passe à l'échéance
+  sans_chiffre:
+    fr: Demandez une réservation ; nous revenons vers vous pour en convenir des conditions.
+    en: Ask us to hold this piece, and we'll get back to you to agree on the terms.
+
+delai_livraison_france:
+  statut: à confirmer
+  valeur: null
+  sans_chiffre:
+    fr: Le délai de livraison vous est indiqué avec le devis.
+    en: Delivery time is given with your quote.
+
+delai_livraison_etats_unis:
+  statut: à confirmer
+  valeur: null
+  sans_chiffre:
+    fr: Le délai de livraison vers les États-Unis vous est indiqué avec le devis.
+    en: Delivery time to the US is given with your quote.
+
+retours:
+  statut: à confirmer
+  valeur: null
+  sans_chiffre:
+    fr: Les conditions de retour figurent dans nos conditions de vente.
+    en: Our return policy is set out in our terms of sale.
+
+moyens_de_paiement:
+  statut: à confirmer
+  valeur: null
+  sans_chiffre:
+    fr: Les moyens de paiement vous sont indiqués avec notre réponse.
+    en: Payment options are listed in our reply.
+
+remise_professionnels:
+  statut: à confirmer
+  valeur: null    # taux, conditions, justificatif demandé
+  sans_chiffre:
+    fr: Architectes et décorateurs, contactez-nous pour connaître nos conditions.
+    en: Interior designers and architects, please contact us about trade terms.
+
+recablage_etats_unis:
+  statut: à confirmer
+  valeur: null    # fait avant la vente ? sur demande ? par qui ? à quel prix ?
+  sans_chiffre:
+    fr: Câblage pour les États-Unis sur demande.
+    en: US wiring available on request.
+
+reglement_des_droits:
+  # Tant que Nathalie n'a pas choisi, ne JAMAIS écrire « droits compris »
+  # ni « duties included ».
+  statut: à confirmer
+  valeur: null    # « compris dans notre facture » ou « payés au transporteur à la livraison »
+  sans_chiffre:
+    fr: Les droits de douane américains sont estimés ci-dessus ; la façon de les régler vous est précisée avec le devis.
+    en: US import duties are estimated above; how they are paid will be confirmed with your quote.
+
+visite_galerie:
+  statut: à confirmer
+  valeur: null    # horaires, sur rendez-vous ou non
+  sans_chiffre:
+    fr: Pour voir la pièce à la galerie, écrivez-nous ou appelez-nous.
+    en: To see this piece at our Lyon gallery, write or call us.
