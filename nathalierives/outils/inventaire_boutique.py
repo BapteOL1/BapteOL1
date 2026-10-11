@@ -10,6 +10,7 @@ import csv
 import json
 import re
 import sys
+import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -89,17 +90,25 @@ def dimensions(t):
     return extrait[:200], (max(nombres) if nombres else None)
 
 
+def _norm(s):
+    s = unicodedata.normalize("NFD", s)
+    return "".join(c for c in s if unicodedata.category(c) != "Mn").lower()
+
+
 def noms_dans(t):
-    trouves, reste = [], t
+    """Noms de la liste présents dans le texte (sans tenir compte des accents
+    ni des majuscules : « Jean ROYERE » = « Jean Royère »)."""
+    trouves, reste = [], _norm(t)
     for n in NOMS_PAR_LONGUEUR:
-        if re.search(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", reste):
+        motif = r"(?<![\w-])" + re.escape(_norm(n)) + r"(?![\w-])"
+        if re.search(motif, reste):
             trouves.append(n)
-            reste = re.sub(re.escape(n), " ", reste)
+            reste = re.sub(motif, " ", reste)
     return trouves
 
 
 def niveau(t, nom):
-    i = t.find(nom)
+    i = _norm(t).find(_norm(nom))
     avant = t[max(0, i - 40):i].lower()
     if "dans le goût" in avant or "dans le style" in avant or "style" in avant[-12:]:
         return "dans le goût de"

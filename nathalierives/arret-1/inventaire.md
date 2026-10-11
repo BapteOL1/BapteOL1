@@ -16,8 +16,93 @@ ouvrables dans Excel ou Google Sheets.
 | Projets après regroupement | 37 | voir le tableau des regroupements |
 | Parutions de presse | 222 | adresses distinctes ; 156 PDF, 44 pages web, 11 vidéos, 11 images |
 | — dont datées | 65 | mois et année lus dans le titre ou le nom du fichier ; 6 à vérifier |
-| Pièces de la boutique | 185 | 35 catégories |
-<!-- BOUTIQUE -->
+| Pièces de la boutique | 185 | 35 catégories ; valeur affichée 166 399 € TTC |
+| Photos de la boutique | 528 | médiane du plus grand côté : 729 px ; 13 pièces seulement ont une photo de 2 000 px |
+
+## Les pièces de la boutique
+
+| Famille | Pièces |
+|---|---|
+| Luminaires | 35 |
+| Art de la table | 26 |
+| Éditions et artistes (Capsule, Galatée Martin, PEM, vases Capri…) | 23 |
+| Meubles | 20 |
+| Céramiques | 19 |
+| Assises | 16 |
+| Objets divers | 15 |
+| Art (tableaux, gravures, lithographies) | 14 |
+| Tapisseries | 13 |
+| Bougeoirs, miroir, coussin | 4 |
+
+**Ce qui existe et que je garde.** Les fiches sont plus riches que ne le
+laissait penser l'audit :
+- **171 sur 185 donnent des dimensions** ;
+- **62 une époque** (« années 50 », « Art Déco »…) ;
+- **62 un nom** de designer, d'atelier, d'éditeur ou d'artiste ;
+- beaucoup donnent les matières.
+
+Tout ce texte est repris tel quel dans la fiche française.
+
+**Ce qui manque :**
+- **Aucune référence.** Je propose le numéro de la boutique actuelle
+  (ex. 1095), qui sert aussi aux redirections. Nathalie a-t-elle son propre
+  registre ?
+- **L'état** : 3 fiches seulement en parlent (« défaut de cuisson sur un
+  côté », « en l'état », « très bon état »). Aucun luminaire.
+- **Le câblage** : 4 luminaires mentionnent les ampoules, **aucun le câblage
+  pour les États-Unis**.
+- **Les photos** : 49 pièces n'ont qu'une photo, 86 en ont une ou deux,
+  26 seulement en ont cinq ou plus. Parmi les luminaires, **26 sur 35 ont une
+  ou deux photos**. Ce sont des PNG ou des JPEG de 729 px en général, et
+  l'original conservé par la boutique n'est pas plus grand. 181 pièces sont à
+  rephotographier, en commençant par les plus chères : meuble André Sornay
+  (12 000 €), table à manger (12 000 €), enfilade (11 000 €), tapisseries
+  Galatée Martin (9 500 €)… (onglet « 6. Photos » du classeur).
+- **Aucune pièce marquée vendue.** 5 sont « plus en stock » : quatre tables
+  Capsule (une édition, sans doute faite à la commande) et le coussin Frey.
+
+### Les noms cités sur les fiches (le site ne citera que ceux-là)
+
+Designers, ateliers, éditeurs et artistes nommés dans le texte des fiches :
+André Sornay · Audoux & Minet (deux pièces, écrit de deux façons) · Maison
+Bagues · Gio Ponti (« 4 chaises Gio Ponti », à vérifier) · Knoll · Jean
+Royère (« dans le goût de ») · Murano (« dans le goût de ») · Ezan · Pol
+Chambost · Elchinger · Vallauris (écrit aussi « Valauris ») · Grandjean-Jourdan
+· Labrut Frères · St Clément · Accolay · Ziegler (Schaffhausen, en Suisse :
+hors UE) · Santos · Roga · Jean Picart Le Doux, édité par Robert Four · Jean-Louis
+Viard · Hervé Lelong · Jean Lurçat (« dans le goût de ») · Georges Braque
+(« reproduction d'après ») · Gianni Verma · Georges Rohner · Gianfranco
+Schialvino · Denise Margoni · Olivier Cajan · Barois · Galatée Martin
+(tapisseries tissées par Tissage des Flandres pour la Maison Pinton) · PEM ·
+Les Enfants du Design · et ses éditions : la table Capsule, les vases Capri
+(avec Géraldine Zuchowicz).
+Les maisons de tissus (Pierre Frey, Zimmer + Rohde, Dedar) sont citées pour
+la garniture, pas comme auteurs.
+
+**Aucune pièce de Guariche, Motte, Alain Richard ou Arlus n'est en ligne**,
+contrairement à ce que laissent entendre le plan et les brouillons anglais.
+Ces noms n'apparaîtront donc pas sur le site. **Question pour Nathalie :
+pour quoi la galerie est-elle connue ?** (N4)
+
+### Types douaniers et tailles d'envoi proposés
+
+D'après le titre, la description et les dimensions, jamais d'après les
+photos. À valider par Nathalie (onglet « 3. Douane et envoi ») :
+
+| Type proposé | Pièces |
+|---|---|
+| Luminaire (10 %) | 35 |
+| Meuble (10 %) | 20 |
+| Céramique décorative (10 %) | 18 |
+| Tapisserie (10 %) | 15 |
+| Siège rembourré à structure bois (15 %) | 4 |
+| Siège rembourré à structure métal ou teck (10 %) | 2 |
+| **Vide** : pas de taux vérifié (vaisselle, art, verre, miroir, coussin), œuvre ou édition à préciser, une pièce suisse | 81 |
+| **Vide** : siège dont la structure ou la garniture n'est pas écrite | 10 |
+
+Tailles d'envoi proposées : 104 petites, 51 moyennes, 16 grandes, 14 sans
+dimensions. L'origine (fabriquée dans l'UE ou non) est **à confirmer pour
+toutes**, car les taux vérifiés ne valent que pour l'UE.
 
 ## Les projets
 
