@@ -6,40 +6,48 @@ relis `BRIEF.md`, ce journal et `QUESTIONS.md`, puis je continue.
 
 ## Où on en est
 
-**Étape 1 : exploration, en cours** (11 octobre 2026, soir).
+**Arrêt 1 atteint** (11 octobre 2026, soir) : j'attends ton accord avant
+les deux directions de design (arrêt 2).
 
 ```
-Projet   [██░░░░░░░░░░░░░░░░░░]  ~10 %
-Arrêt 1  [██████████████░░░░░░]  ~70 %   inventaire de la boutique en cours
+Projet   [████░░░░░░░░░░░░░░░░]  ~20 %   arrêt 1 sur 5
+Arrêt 1  [████████████████████]  fait, en attente de ton accord
 ```
 
-- L'accès réseau est ouvert depuis le 11/10 : le site, son API WordPress et
-  la boutique répondent.
-- Inventaire WordPress fait : `arret-1/inventaire.md` et les tableaux dans
-  `inventaire/`.
-- Inventaire de la boutique (185 pièces) : lecture lente en cours, avec
-  `outils/boutique_inventaire.py`. Si la conversation s'arrête, relancer :
-  `python3 -I outils/boutique_inventaire.py inventaire/brut`, puis
-  `python3 -I outils/inventaire_boutique.py inventaire/brut inventaire` et
-  `python3 -I outils/redirections.py inventaire arret-1/redirections-brouillon.csv`.
-- Faits : plan du site et menu (`arret-1/plan-du-site.md`), ce qui disparaît
-  et les exports à faire soi-même (`arret-1/ce-qui-disparait.md`), brouillon
-  du choix technique et des coûts (`arret-1/technique-et-couts.md`).
-- Fait sans attendre : le calcul des prix pour les États-Unis
-  (`site/src/lib/prix.ts`, 14 tests), le fichier unique de réglages
-  (`site/src/donnees/reglages-prix.yaml`) et celui des engagements
+- Compte rendu : `arret-1/COMPTE-RENDU.md` (ce qui marche, ce qui ne marche
+  pas, tes décisions V1 à V6, ce que je n'ai pas pu vérifier).
+- Inventaire : `arret-1/inventaire.md` ; tableaux dans `inventaire/`.
+- Pour Nathalie : `arret-1/a-valider-avec-nathalie.xlsx` (6 onglets) et
+  `a-fournir/contenus-pilotes.md`.
+- Plan du site et menu : `arret-1/plan-du-site.md`. Ce qui disparaît :
+  `arret-1/ce-qui-disparait.md`. Technique et coûts :
+  `arret-1/technique-et-couts.md`. Redirections (brouillon) :
+  `arret-1/redirections-brouillon.csv`.
+- Sites de référence : `notes/references/sites-de-reference.md` et 50
+  captures. Prix relus : `notes/recherche-technique-couts.md`.
+- Fait sans attendre : calcul des prix US (`site/src/lib/prix.ts`, 14 tests),
+  réglages (`site/src/donnees/reglages-prix.yaml`), engagements
   (`site/src/donnees/engagements.yaml`).
-- En cours : étude des sites de référence dans un vrai navigateur
-  (`notes/references/`), revérification des prix des services sur les
-  pages officielles (`notes/recherche-technique-couts.md`).
 
 ### Toujours bloqué
-- **Les quatre études** (`etudes/`) n'ont pas été fournies (T2). La formule
-  du prix livré suit le plan, à titre provisoire. Rien de ce qui en dépend
-  ne s'affiche tant que les forfaits ne sont pas « confirmés ».
+- **Les quatre études** (`etudes/`) n'ont pas été fournies (T2).
+
+### Pour relancer les outils d'inventaire (si besoin)
+`python3 -I outils/wp_export.py inventaire/brut` ;
+`python3 -I outils/boutique_inventaire.py inventaire/brut` (lent, reprend
+où il s'est arrêté) ; puis `outils/inventaire_wp.py`,
+`outils/inventaire_boutique.py`, `outils/redirections.py`,
+`outils/classeur_nathalie.py` (arguments en tête de chaque fichier).
 
 ## Ce qui est décidé, et pourquoi
 
+- **11/10 — « Ma sélection » remplace la liste de souhaits** : plusieurs
+  pièces dans une seule demande, sans compte (vu chez Galerie Half et Laura
+  Gonzalez ; le brief cite Galerie Half pour cela).
+- **11/10 — En anglais, « Collection »** pour la galerie : c'est le mot de
+  Maison Gerard (New York) pour son stock.
+- **11/10 — Les fiches gardent tout le texte actuel** (dimensions, époque,
+  noms, matières) ; titres et attributions seulement proposés, à valider.
 - **11/10 — Calcul des prix : règles du brief codées et testées.** Pas de
   dollars sans règle de TVA, taux de change et validation de Nathalie ;
   jamais de conversion du TTC ; droits toujours chiffrés ou « sur demande » ;
@@ -79,21 +87,27 @@ regroupements de projets dans `arret-1/inventaire.md`.
 
 ## Ce qui reste à faire
 
-### Arrêt 1
-- [x] Revérifier l'API WordPress et partir des pages de catégories.
-- [x] Inventaire WordPress : projets, presse, PDF, pages, crédits.
-- [ ] Inventaire de la boutique : pièces, designers nommés, titres à
-      vérifier, pièces à rephotographier, types douaniers et tailles proposés.
-- [ ] Table de redirection (brouillon) avec les pièces.
-- [x] Registre public du domaine.
+### Arrêt 1 — fait
+- [x] API WordPress revérifiée ; boutique lue depuis les catégories.
+- [x] Inventaire WordPress et boutique, designers, titres, photos, douane.
+- [x] Table de redirection (brouillon), registre du domaine.
 - [x] Plan du site et menu ; ce qui disparaît ; exports.
-- [ ] Sites de référence (en cours) ; prix revérifiés (en cours).
-- [ ] Compte rendu de l'arrêt 1.
+- [x] Sites de référence ; prix revérifiés ; compte rendu.
+
+### Arrêt 2 (après ton accord)
+- [ ] Deux directions de design, à 390 et 1 440 px, sur quatre écrans, avec
+      ses vraies photos et ses vrais textes (douze pièces au hasard).
+- [ ] Police libre à côté de Brandon ; tracé du logo si besoin (T4).
+- [ ] Page en mots simples pour Nathalie, lisible sur son téléphone.
 
 ### Plus tard
 - [ ] Modèle des fiches dans l'interface d'édition (arrêt 3).
 
 ## Historique
+
+- **11/10/2026, nuit** — Arrêt 1 : inventaire complet (185 pièces, 37
+  projets, 222 parutions), classeur pour Nathalie, redirections, sites de
+  référence, prix relus, compte rendu.
 
 - **11/10/2026, soir** — Accès réseau ouvert. Inventaire WordPress, registre
   du domaine, plan du site, ce qui disparaît, calcul des prix et réglages.
