@@ -1,0 +1,8 @@
+# Exports bruts : on garde seulement les versions compressées (.json.gz)
+inventaire/brut/*.json
+!inventaire/brut/boutique_categories.json
+inventaire/brut/wp_users*
+node_modules/
+dist/
+.astro/
+__pycache__/
