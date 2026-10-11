@@ -44,3 +44,6 @@ premier lot (luminaires) · **Lots** autres lots · **A5** avant la bascule.
 - Ce qui disparaît (panier, paiement, comptes, liste de souhaits) et comment
   exporter toi-même commandes, comptes clients et abonnés.
 - La liste des comptes à ouvrir, dans l'ordre.
+- Les réglages du domaine pour les emails de confirmation et l'adresse sans
+  « www » (conflit avec « ne change que le réglage du site »).
+- Un compte GitHub gratuit pour la personne du studio : acceptable ?

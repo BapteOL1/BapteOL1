@@ -19,9 +19,10 @@ Arrêt 1  [░░░░░░░░░░░░░░░░░░░░]  bloqu�
   `a-fournir/contenus-pilotes.md`.
 - Formule du prix livré relevée dans le plan, à titre provisoire :
   `notes/formule-provisoire-plan.md`.
-- Recherche des prix actuels (hébergement, interface d'édition, emails,
-  mesure d'audience, police Brandon) en cours : résultat dans
-  `notes/recherche-technique-couts.md`.
+- Recherche des prix actuels faite : `notes/recherche-technique-couts.md`.
+  **Fiabilité limitée** : l'outil de lecture des pages web était en panne ce
+  jour-là ; les chiffres viennent des extraits du moteur de recherche. À
+  relire sur les pages officielles avant l'arrêt 1.
 
 ### Deux blocages constatés le 11 octobre
 
@@ -59,6 +60,37 @@ Arrêt 1  [░░░░░░░░░░░░░░░░░░░░]  bloqu�
   j'ai relevé celle du calculateur du plan, sans en reprendre ce que le
   brief écarte (Shopify, « droits compris »).
 
+### Ce que dit la recherche des prix (provisoire, à revérifier)
+
+- Une combinaison à **0 € par mois** semble possible : hébergement
+  Cloudflare (offre gratuite, usage commercial a priori permis), interface
+  d'édition Sveltia CMS (gratuite, bilingue, réduit les photos à l'envoi,
+  encore en version bêta), emails par Brevo (gratuit jusqu'à 300 par jour,
+  données en Europe), mesure d'audience Cloudflare Web Analytics (gratuite,
+  sans cookie ; régler l'option qui exclut par défaut les visiteurs
+  européens). Option confort : environ 5 $ par mois.
+- Vercel (offre gratuite) et GitHub Pages interdisent l'usage commercial :
+  écartés.
+- La personne du studio aurait besoin d'un **compte GitHub gratuit** avec
+  Sveltia. Repli sans compte GitHub : Pages CMS, moins complet.
+- Police : une police libre ne coûte rien ; la licence web de Brandon chez
+  son créateur (HVD) se fait sur devis ; Adobe Fonts enverrait l'adresse des
+  visiteurs à Adobe.
+- Hors technique (fourchettes) : relecture de l'anglais par un Américain
+  150 à 400 $ (correction) ou 500 à 1 400 $ (adaptation) ; avocat pour les
+  conditions de vente 600 à 1 300 € HT, 2 500 à 5 000 € HT avec CGU et
+  confidentialité ; photographe à Lyon 450 à 1 200 € la journée.
+- **Conflit avec le brief à trancher à l'arrêt 1** : pour que l'email de
+  confirmation parte d'une adresse du studio vers n'importe quel visiteur,
+  il faut ajouter deux ou trois lignes dans les réglages du domaine (DNS,
+  l'annuaire qui dit où vont le site et les emails). Ces ajouts ne coupent
+  pas les emails existants s'ils sont faits correctement, mais le brief dit
+  de ne changer que le réglage du site. Même chose pour servir l'adresse sans
+  « www ». Je proposerai les options à l'arrêt 1. D'ici la bascule, rien ne
+  change : tous les emails vont à ton adresse.
+- Le registre du domaine n'a pas pu être lu. Le site actuel crédite un
+  prestataire web extérieur : c'est probablement lui qui a les accès (T5).
+
 ## Ce que j'attends de toi
 
 Voir `QUESTIONS.md`, rubrique « Pour toi ». En priorité : **T1** (accès
@@ -74,7 +106,8 @@ Voir `QUESTIONS.md`, rubrique « Pour Nathalie », et
 ### Possible sans attendre
 - [x] Enregistrer le brief, ouvrir le journal, poser les questions.
 - [x] Liste exacte des contenus pilotes.
-- [ ] Prix vérifiés des services (en cours).
+- [x] Prix des services (recherche faite, à revérifier sur les pages
+      officielles quand l'accès réseau sera ouvert).
 - [ ] Modèle des fiches (pièce chinée, édition, projet, parution) avec tous
       les champs du brief.
 - [ ] Fichier de réglages (taux de change, droits par type, forfaits
@@ -99,4 +132,5 @@ Voir `QUESTIONS.md`, rubrique « Pour Nathalie », et
 ## Historique
 
 - **11/10/2026** — Démarrage. Brief enregistré. Constat des deux blocages.
-  Questions posées. Recherche des prix lancée.
+  Questions posées. Recherche des prix faite (fiabilité limitée, voir plus
+  haut).
