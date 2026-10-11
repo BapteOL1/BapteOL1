@@ -40,11 +40,11 @@ Legal notice · Terms of sale · Privacy · Instagram · newsletter.
    chaque fiche** (sous les boutons d'action, comme le demande le brief).
    Pourquoi : c'est sur la fiche qu'on se pose la question.
 3. **En anglais, « Collection » plutôt que « Gallery ».** « Gallery » se lit
-   « galerie de photos ». « Collection » peut se lire « ses créations » : la
-   page s'ouvre donc sur un titre clair, « Vintage furniture & lighting »,
-   avec ses éditions dans une rubrique à part, « Nathalie Rives editions ».
-   *(À confirmer après l'étude des sites de référence, qui notera les
-   libellés exacts des galeries américaines.)*
+   « galerie de photos ». Maison Gerard, une galerie new-yorkaise du comparatif,
+   appelle justement « COLLECTION » son stock de pièces anciennes.
+   « Collection » peut aussi se lire « ses créations » : la page s'ouvre donc
+   sur un titre clair, « Vintage furniture & lighting », et ses éditions ont
+   une rubrique à part, « Nathalie Rives editions ».
 4. **« Scénographies » devient une quatrième rubrique d'Intérieurs**
    (Farrow & Ball, Bakélite Store, A Galerie, Le Grand Hôtel-Dieu, ZOO Art
    Show, Workshop Domodeco). Elle n'apparaît comme filtre que si elle sépare
@@ -98,10 +98,29 @@ Les pages « merci » servent aussi à compter les demandes envoyées, sans cook
   état et restaurations, prix selon la langue, livraison, trois boutons
   (question, réservation, devis de livraison), « comment acheter » en quatre
   lignes, « Vue dans » (projet), pièces proches, fiche PDF.
+  Repris des sites de référence (voir `notes/references/sites-de-reference.md`) :
+  - « Poser une question » et « Fiche PDF » juste sous le titre, visibles
+    dès le premier écran du téléphone (Zana) ;
+  - sous le prix, une phrase qui dit ce qu'il comprend et pour quelle
+    destination (Chez Pluie), sans jamais écrire « droits compris » tant que
+    Nathalie n'a pas choisi ;
+  - l'état et les restaurations sur deux lignes séparées, et une ligne de
+    câblage courte (« 120V US wiring » ou « on request ») toujours au même
+    endroit (Pamono, Galerie Half) ;
+  - les dimensions en pouces puis en cm, avec les précisions (« chaque
+    applique », « abat-jour compris ») (Demisch Danant) ;
+  - **« Ma sélection »** : ajouter plusieurs pièces à une seule demande, avec
+    un compteur dans l'en-tête, sans compte (Galerie Half, Laura Gonzalez).
+    C'est ce qui remplace la liste de souhaits, et ce qu'une designer
+    utilise pour préparer un projet ;
+  - pièce vendue : badge « Vendu » dans la liste, page conservée, bouton
+    « Je cherche une pièce de ce type » (Chez Pluie).
 - **Page projet** : titre, ville, année si elle est connue, deux paragraphes,
   trois faits, photos avec crédits, pièces de la galerie qu'on y voit
-  (vendues ou non, avec des pièces proches), projet suivant. Peut prendre
-  une teinte tirée de ses photos.
+  (vendues ou non, avec des pièces proches), projet suivant nommé. Peut
+  prendre une teinte tirée de ses photos. Le lien pièce ↔ projet est saisi
+  **une seule fois** et s'affiche des deux côtés (« Vue dans » sur la fiche) :
+  chez Pierre Yovanovitch, tenus à la main, ces liens sont incomplets.
 - **Studio** : son histoire (texte actuel conservé : Paris, Buenos Aires, six
   ans à New York), l'équipe, la méthode (texte actuel du « Bureau
   d'études »), les récompenses (French Design by VIA 2018/2019, Art &

@@ -39,6 +39,14 @@ design (arrêt 2).
 - **Le choix technique et tous les coûts** sont dans
   `arret-1/technique-et-couts.md`. Les prix ont été relus sur les pages
   officielles. **Le site coûte 0 € par mois en technique.**
+- **Les sites de référence ont été regardés dans un vrai navigateur**, à
+  390 et 1 440 px : 50 captures, et une synthèse de 15 idées à reprendre et
+  17 points à éviter dans `notes/references/sites-de-reference.md`. Le
+  trafic sortait des États-Unis : les prix s'affichaient en dollars. J'en
+  retiens notamment la phrase qui dit ce que le prix comprend (Chez Pluie),
+  l'état et les restaurations séparés (Pamono), « 120V US wiring »
+  (Galerie Half), et « Ma sélection », une demande pour plusieurs pièces
+  (Galerie Half, Laura Gonzalez).
 - **Le calcul des prix pour les États-Unis est fait et testé** (14 vérifications
   automatiques). Il part d'un seul fichier de réglages, et toutes les
   promesses sont rangées dans un seul fichier où elles restent « à
@@ -117,7 +125,12 @@ T11 (newsletter), T13 (île Saint-Louis). Détail dans `QUESTIONS.md`.
   sur un envoi de test.
 - **Le temps de fabrication du site** avec un millier de photos : à tester à
   l'arrêt 3.
-- **Le site vu depuis New York** : les sites de référence ont été regardés
-  depuis cet environnement, pas comme un New-Yorkais.
+- **Trois sites de référence m'ont bloqué** : morentz.com (anti-fraude qui
+  écarte les centres de données), theinvisiblecollection.com (bloqué par
+  Cloudflare dès la deuxième page) et en partie pierreyovanovitch.com
+  (erreurs du serveur). Pour eux, je me fie à ta description : filtres par
+  dimensions, réservation, tableau technique et fiche PDF chez Morentz ;
+  fiche PDF avec ou sans prix et câblage par pays chez The Invisible
+  Collection. Je n'ai vu de bouton « réserver » sur aucun des sites ouverts.
 - **Le prix de GitHub Pro** : github.com refuse les lectures automatiques ;
   il n'est pas nécessaire.
